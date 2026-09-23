@@ -2251,11 +2251,12 @@
 
             level++;
 
-            setTimeout(() => {
-
-                showLevelUp();
-
-            }, 700);
+            /*
+                Mostra o aviso imediatamente, ainda na questão respondida.
+                Isso evita que um timer atrasado dispare depois que o jogador
+                já avançou para a próxima pergunta.
+            */
+            showLevelUp();
         }
     }
 
@@ -2345,8 +2346,8 @@
             notice.style.cssText = `
                 position: fixed;
                 left: 50%;
-                top: 82px;
-                transform: translateX(-50%) translateY(-12px);
+                bottom: 86px;
+                transform: translateX(-50%) translateY(12px);
                 z-index: 9999;
                 padding: 11px 18px;
                 border-radius: 999px;
@@ -2361,6 +2362,8 @@
                 opacity: 0;
                 transition: opacity .2s ease, transform .2s ease;
             `;
+            notice.setAttribute("role", "status");
+            notice.setAttribute("aria-live", "polite");
             document.body.appendChild(notice);
         }
 
@@ -2371,8 +2374,8 @@
         clearTimeout(window.levelUpNoticeTimer);
         window.levelUpNoticeTimer = setTimeout(() => {
             notice.style.opacity = "0";
-            notice.style.transform = "translateX(-50%) translateY(-12px)";
-        }, 1600);
+            notice.style.transform = "translateX(-50%) translateY(12px)";
+        }, 1400);
     }
 
 
