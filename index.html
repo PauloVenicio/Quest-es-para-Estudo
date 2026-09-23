@@ -735,6 +735,10 @@
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after { scroll-behavior:auto !important; animation-duration:.01ms !important; transition-duration:.01ms !important; }
         }
+
+        .category-tabs{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;margin:18px 0 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch;position:sticky;top:0;z-index:2;background:linear-gradient(#111827 70%,transparent)}
+        .category-tabs::-webkit-scrollbar{display:none}.category-tab{flex:0 0 auto;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:var(--muted);padding:10px 13px;border-radius:999px;font-weight:700;cursor:pointer}.category-tab.active{color:white;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-color:transparent}.subject-card.hidden{display:none}
+        @media(max-width:650px){.category-tabs{margin:12px -2px 2px;padding-bottom:7px}.category-tab{padding:9px 11px;font-size:12px}.subject-card small{max-height:2.6em;overflow:hidden}}
     </style>
 </head>
 
@@ -785,52 +789,43 @@
 
             <p>Escolha uma matéria para começar. Seu nome fica salvo neste dispositivo e sua pontuação entra no ranking.</p>
 
+            <div class="category-tabs" role="tablist" aria-label="Categorias de matérias">
+                <button class="category-tab active" onclick="filterSubjects('todas', this)">✨ Todas</button>
+                <button class="category-tab" onclick="filterSubjects('basicas', this)">📚 Básicas</button>
+                <button class="category-tab" onclick="filterSubjects('direito', this)">⚖️ Direito</button>
+                <button class="category-tab" onclick="filterSubjects('bancarias', this)">🏦 Bancárias</button>
+                <button class="category-tab" onclick="filterSubjects('gerais', this)">🌎 Gerais</button>
+                <button class="category-tab" onclick="filterSubjects('tecnologia', this)">💻 Tecnologia</button>
+            </div>
             <div class="subject-grid">
-                <button class="subject-card" onclick="selectSubject('portugues')">
-                    <div class="subject-icon">📚</div>
-                    <strong>Português</strong>
-                    <small>Ortografia, palavras corretas e uso da língua portuguesa.</small>
-                </button>
-                <button class="subject-card math" onclick="selectSubject('matematica')">
-                    <div class="subject-icon">➗</div>
-                    <strong>Matemática</strong>
-                    <small>Adição, subtração, multiplicação, divisão, frações e problemas.</small>
-                </button>
-                <button class="subject-card info" onclick="selectSubject('informatica')">
-                    <div class="subject-icon">💻</div>
-                    <strong>Conhecimentos de Informática</strong>
-                    <small>Questões de concurso sobre Windows, Office, internet, redes, hardware e segurança.</small>
-                </button>
-                <button class="subject-card logic" onclick="selectSubject('logica')">
-                    <div class="subject-icon">🧠</div>
-                    <strong>Raciocínio Lógico</strong>
-                    <small>Questões de concurso sobre sequências, proposições, lógica, conjuntos e problemas.</small>
-                </button>
-                <button class="subject-card english" onclick="selectSubject('ingles')">
-                    <div class="subject-icon">🇺🇸</div>
-                    <strong>Inglês</strong>
-                    <small>Questões de concurso sobre vocabulário, gramática, interpretação e expressões.</small>
-                </button>
-                <button class="subject-card science" onclick="selectSubject('ciencias')">
-                    <div class="subject-icon">🔬</div>
-                    <strong>Ciências</strong>
-                    <small>Corpo humano, seres vivos, matéria, energia, ambiente, saúde e astronomia.</small>
-                </button>
-                <button class="subject-card geography" onclick="selectSubject('geografia')">
-                    <div class="subject-icon">🌎</div>
-                    <strong>Geografia</strong>
-                    <small>Brasil, regiões, relevo, clima, população, cartografia e aspectos do Maranhão.</small>
-                </button>
-                <button class="subject-card history" onclick="selectSubject('historia')">
-                    <div class="subject-icon">🏛️</div>
-                    <strong>História do Brasil e do Maranhão</strong>
-                    <small>Brasil Colônia, Império, República e acontecimentos importantes da história maranhense.</small>
-                </button>
-                <button class="subject-card banking" onclick="selectSubject('bancarios')">
-                    <div class="subject-icon">🏦</div>
-                    <strong>Conhecimentos Bancários</strong>
-                    <small>Sistema Financeiro Nacional, produtos bancários, crédito, pagamentos, mercado financeiro e atendimento.</small>
-                </button>
+                <button class="subject-card" data-category="basicas" onclick="selectSubject('portugues')"><div class="subject-icon">📚</div><strong>Português</strong><small>Gramática, ortografia e interpretação.</small></button>
+                <button class="subject-card math" data-category="basicas" onclick="selectSubject('matematica')"><div class="subject-icon">➗</div><strong>Matemática</strong><small>Cálculos, porcentagem, frações e problemas.</small></button>
+                <button class="subject-card logic" data-category="basicas" onclick="selectSubject('logica')"><div class="subject-icon">🧠</div><strong>Raciocínio Lógico</strong><small>Sequências, proposições, conjuntos e lógica.</small></button>
+                <button class="subject-card english" data-category="basicas" onclick="selectSubject('ingles')"><div class="subject-icon">🇺🇸</div><strong>Inglês</strong><small>Vocabulário, gramática e interpretação.</small></button>
+                <button class="subject-card" data-category="basicas" onclick="selectSubject('redacao')"><div class="subject-icon">✍️</div><strong>Redação e Interpretação</strong><small>Coesão, coerência e compreensão textual.</small></button>
+                <button class="subject-card math" data-category="basicas" onclick="selectSubject('matfinanceira')"><div class="subject-icon">💹</div><strong>Matemática Financeira</strong><small>Juros, descontos e porcentagens.</small></button>
+                <button class="subject-card" data-category="basicas" onclick="selectSubject('estatistica')"><div class="subject-icon">📊</div><strong>Estatística</strong><small>Média, mediana, gráficos e probabilidade.</small></button>
+
+                <button class="subject-card" data-category="direito" onclick="selectSubject('constitucional')"><div class="subject-icon">⚖️</div><strong>Direito Constitucional</strong><small>Constituição, direitos e organização do Estado.</small></button>
+                <button class="subject-card" data-category="direito" onclick="selectSubject('administrativo')"><div class="subject-icon">📜</div><strong>Direito Administrativo</strong><small>Atos, poderes, agentes e serviços públicos.</small></button>
+                <button class="subject-card" data-category="direito" onclick="selectSubject('admpublica')"><div class="subject-icon">🏛️</div><strong>Administração Pública</strong><small>Gestão, princípios e planejamento público.</small></button>
+                <button class="subject-card" data-category="direito" onclick="selectSubject('etica')"><div class="subject-icon">🤝</div><strong>Ética e Cidadania</strong><small>Ética, cidadania, direitos e deveres.</small></button>
+
+                <button class="subject-card banking" data-category="bancarias" onclick="selectSubject('bancarios')"><div class="subject-icon">🏦</div><strong>Conhecimentos Bancários</strong><small>SFN, crédito, pagamentos e mercado financeiro.</small></button>
+                <button class="subject-card banking" data-category="bancarias" onclick="selectSubject('bnb')"><div class="subject-icon">🏦</div><strong>Conhecimentos sobre o BNB</strong><small>Desenvolvimento regional e atuação institucional.</small></button>
+                <button class="subject-card" data-category="bancarias" onclick="selectSubject('economia')"><div class="subject-icon">💵</div><strong>Economia</strong><small>Inflação, PIB, juros, câmbio e políticas econômicas.</small></button>
+                <button class="subject-card" data-category="bancarias" onclick="selectSubject('contabilidade')"><div class="subject-icon">🧮</div><strong>Contabilidade Básica</strong><small>Patrimônio, ativo, passivo, receitas e despesas.</small></button>
+
+                <button class="subject-card science" data-category="gerais" onclick="selectSubject('ciencias')"><div class="subject-icon">🔬</div><strong>Ciências</strong><small>Seres vivos, matéria, energia e astronomia.</small></button>
+                <button class="subject-card geography" data-category="gerais" onclick="selectSubject('geografia')"><div class="subject-icon">🌎</div><strong>Geografia</strong><small>Brasil, regiões, clima, relevo e população.</small></button>
+                <button class="subject-card history" data-category="gerais" onclick="selectSubject('historia')"><div class="subject-icon">🏛️</div><strong>História do Brasil e Maranhão</strong><small>Colônia, Império, República e história maranhense.</small></button>
+                <button class="subject-card geography" data-category="gerais" onclick="selectSubject('maranhao')"><div class="subject-icon">🗺️</div><strong>Conhecimentos do Maranhão</strong><small>História, geografia, cultura e economia estadual.</small></button>
+                <button class="subject-card science" data-category="gerais" onclick="selectSubject('meioambiente')"><div class="subject-icon">🌱</div><strong>Meio Ambiente</strong><small>Ecologia, sustentabilidade e recursos naturais.</small></button>
+                <button class="subject-card" data-category="gerais" onclick="selectSubject('atualidades')"><div class="subject-icon">📰</div><strong>Atualidades</strong><small>Conceitos para compreender temas atuais.</small></button>
+
+                <button class="subject-card info" data-category="tecnologia" onclick="selectSubject('informatica')"><div class="subject-icon">💻</div><strong>Informática</strong><small>Windows, Office, internet, redes e hardware.</small></button>
+                <button class="subject-card info" data-category="tecnologia" onclick="selectSubject('seguranca')"><div class="subject-icon">🔐</div><strong>Segurança da Informação</strong><small>Phishing, malware, senhas, backup e proteção.</small></button>
+                <button class="subject-card info" data-category="tecnologia" onclick="selectSubject('ia')"><div class="subject-icon">🤖</div><strong>Tecnologia e IA</strong><small>IA, nuvem, automação e conceitos digitais.</small></button>
             </div>
 
             <div class="rules">
@@ -1736,6 +1731,114 @@
     const questionsPerLevel = 5;
 
 
+
+    // Bancos adicionais da Central do Conhecimento
+    const redacaoQuestions=[
+{question:"Em um texto, coesão refere-se principalmente a:",options:["Ligação entre palavras, frases e parágrafos","Tamanho do texto","Uso obrigatório de linguagem informal","Quantidade de títulos"],correct:0,explanation:"Coesão é a <strong>articulação linguística</strong> entre as partes do texto."},
+{question:"Coerência textual está relacionada a:",options:["Sentido e lógica das ideias","Quantidade de vírgulas","Tipo de fonte","Número de linhas"],correct:0,explanation:"A coerência diz respeito ao <strong>sentido global e à lógica</strong> do texto."},
+{question:"A ideia principal de um parágrafo é chamada, em muitos contextos, de:",options:["Tópico frasal","Rodapé","Vocativo","Apêndice"],correct:0,explanation:"O <strong>tópico frasal</strong> apresenta ou sintetiza a ideia central do parágrafo."},
+{question:"Qual conectivo normalmente indica oposição?",options:["Porém","Portanto","Porque","Além disso"],correct:0,explanation:"<strong>Porém</strong> é um conectivo adversativo e indica oposição."},
+{question:"Em interpretação de texto, inferir significa:",options:["Deduzir informação a partir de pistas do texto","Copiar uma frase","Ignorar o contexto","Contar palavras"],correct:0,explanation:"Inferência é uma <strong>dedução baseada em informações e pistas</strong> do texto."},
+{question:"Qual elemento retoma um termo anterior e ajuda a evitar repetição?",options:["Pronome","Interjeição","Numeral isolado","Onomatopeia"],correct:0,explanation:"Pronomes podem <strong>retomar referentes</strong> e contribuir para a coesão."}];
+    const matFinanceiraQuestions=[
+{question:"Um capital de R$ 1.000 a juros simples de 2% ao mês por 3 meses gera quanto de juros?",options:["R$ 60","R$ 20","R$ 120","R$ 1.060"],correct:0,explanation:"J=C×i×t=1000×0,02×3=<strong>R$ 60</strong>."},
+{question:"Um produto de R$ 500 com desconto de 10% passa a custar:",options:["R$ 450","R$ 490","R$ 400","R$ 550"],correct:0,explanation:"10% de 500 é 50; 500−50=<strong>R$ 450</strong>."},
+{question:"Nos juros compostos, os juros de cada período incidem:",options:["Sobre o montante acumulado","Apenas sobre o capital inicial","Somente sobre a taxa","Apenas no último mês"],correct:0,explanation:"Nos juros compostos ocorre <strong>capitalização</strong>: juros sobre o montante acumulado."},
+{question:"Se R$ 200 aumentam 25%, o novo valor é:",options:["R$ 250","R$ 225","R$ 240","R$ 275"],correct:0,explanation:"25% de 200=50; novo valor=<strong>R$ 250</strong>."},
+{question:"A fórmula de juros simples é:",options:["J=C×i×t","J=C+i+t","J=C÷i×t","J=C−i−t"],correct:0,explanation:"Em juros simples, usa-se <strong>J=C×i×t</strong>."},
+{question:"Um desconto de 20% sobre R$ 300 equivale a:",options:["R$ 60","R$ 30","R$ 80","R$ 120"],correct:0,explanation:"0,20×300=<strong>R$ 60</strong>."}];
+    const estatisticaQuestions=[
+{question:"A média de 4, 6 e 8 é:",options:["6","5","7","18"],correct:0,explanation:"(4+6+8)/3=<strong>6</strong>."},
+{question:"A mediana de 2, 5, 7, 9 e 12 é:",options:["7","5","9","6"],correct:0,explanation:"Ordenados os valores, o termo central é <strong>7</strong>."},
+{question:"Moda é o valor que:",options:["Mais se repete","Fica sempre no centro","É sempre o maior","É a soma dos dados"],correct:0,explanation:"A <strong>moda</strong> é o valor de maior frequência."},
+{question:"Ao lançar uma moeda equilibrada, a probabilidade de cara é:",options:["1/2","1/3","1/4","1"],correct:0,explanation:"Há dois resultados equiprováveis; P(cara)=<strong>1/2</strong>."},
+{question:"A amplitude de um conjunto é calculada por:",options:["Maior valor menos menor valor","Soma dos valores","Média vezes dois","Mediana menos moda"],correct:0,explanation:"Amplitude=<strong>máximo − mínimo</strong>."},
+{question:"Um gráfico de setores é especialmente útil para mostrar:",options:["Proporções de um total","Somente textos","Endereços IP","Equações algébricas"],correct:0,explanation:"Gráficos de setores representam <strong>partes de um todo</strong>."}];
+    const constitucionalQuestions=[
+{question:"A Constituição Federal é a norma de maior hierarquia no ordenamento jurídico brasileiro?",options:["Sim","Não","Somente nos municípios","Somente em matéria tributária"],correct:0,explanation:"A Constituição ocupa posição <strong>superior</strong> no ordenamento jurídico."},
+{question:"São Poderes da União, independentes e harmônicos entre si:",options:["Legislativo, Executivo e Judiciário","Federal, Estadual e Municipal","Civil, Militar e Eleitoral","União, Estados e Municípios"],correct:0,explanation:"A Constituição estabelece os Poderes <strong>Legislativo, Executivo e Judiciário</strong>."},
+{question:"O direito à vida aparece entre os direitos e garantias fundamentais?",options:["Sim","Não","Apenas para servidores","Apenas em lei estadual"],correct:0,explanation:"O direito à vida integra o conjunto de <strong>direitos fundamentais</strong>."},
+{question:"O voto no Brasil é direto e secreto, nos termos constitucionais?",options:["Sim","Não","Apenas secreto","Apenas indireto"],correct:0,explanation:"A Constituição prevê voto <strong>direto e secreto</strong>, observadas suas regras."},
+{question:"Qual princípio exige tratamento sem favorecimentos pessoais na Administração Pública?",options:["Impessoalidade","Publicidade comercial","Herança","Autonomia privada"],correct:0,explanation:"A <strong>impessoalidade</strong> é princípio expresso da Administração Pública."},
+{question:"Municípios integram a organização político-administrativa brasileira?",options:["Sim","Não","Somente capitais","Somente municípios com mais de 100 mil habitantes"],correct:0,explanation:"A organização político-administrativa compreende União, Estados, DF e <strong>Municípios</strong>."}];
+    const administrativoQuestions=[
+{question:"O princípio da legalidade administrativa indica que o agente público deve:",options:["Atuar conforme o ordenamento jurídico","Agir apenas conforme preferência pessoal","Ignorar regulamentos","Manter atos sempre secretos"],correct:0,explanation:"A atuação administrativa deve observar a <strong>legalidade</strong>."},
+{question:"Um ato administrativo pode ser objeto de controle de legalidade?",options:["Sim","Não","Nunca pelo Judiciário","Somente por empresas"],correct:0,explanation:"Atos administrativos estão sujeitos a <strong>controle de legalidade</strong>."},
+{question:"Poder disciplinar relaciona-se à possibilidade de:",options:["Apurar e sancionar infrações funcionais","Criar moeda","Julgar eleições","Alterar a Constituição sozinho"],correct:0,explanation:"O poder disciplinar permite apurar e punir <strong>infrações administrativas</strong> nos vínculos cabíveis."},
+{question:"Serviço público busca atender:",options:["Necessidades coletivas definidas pelo ordenamento","Somente interesses privados do agente","Apenas empresas estrangeiras","Exclusivamente partidos"],correct:0,explanation:"Serviços públicos destinam-se à satisfação de <strong>necessidades coletivas</strong>."},
+{question:"A publicidade é princípio expresso da Administração Pública?",options:["Sim","Não","Apenas municipal","Apenas judicial"],correct:0,explanation:"A <strong>publicidade</strong> é um dos princípios expressos no art. 37 da Constituição."},
+{question:"Agente público é expressão ampla que pode abranger pessoas que exercem função pública?",options:["Sim","Não","Somente ministros","Somente empregados de bancos"],correct:0,explanation:"<strong>Agente público</strong> é expressão abrangente para quem exerce função pública nas hipóteses legais."}];
+    const admPublicaQuestions=[
+{question:"Planejamento estratégico normalmente trata de:",options:["Objetivos de longo prazo e direção organizacional","Somente tarefas de um dia","Apenas folha de pagamento","Somente arquivos físicos"],correct:0,explanation:"O planejamento estratégico define <strong>direção e objetivos amplos</strong>."},
+{question:"Eficiência na gestão pública relaciona-se a:",options:["Uso adequado de recursos para produzir resultados","Aumentar burocracia sem finalidade","Ocultar resultados","Eliminar planejamento"],correct:0,explanation:"Eficiência envolve buscar resultados com <strong>bom uso dos recursos</strong>."},
+{question:"Um indicador de desempenho serve para:",options:["Acompanhar resultados e metas","Substituir toda decisão humana","Criar senhas","Formatar computadores"],correct:0,explanation:"Indicadores ajudam a <strong>medir e acompanhar desempenho</strong>."},
+{question:"Gestão por processos observa:",options:["Fluxos de atividades que geram entregas","Somente cargos isolados","Apenas patrimônio físico","Somente horários"],correct:0,explanation:"Gestão por processos analisa <strong>fluxos de atividades</strong> e seus resultados."},
+{question:"Transparência pública favorece:",options:["Controle social e acesso à informação","Sigilo absoluto de tudo","Fim da prestação de contas","Ausência de registros"],correct:0,explanation:"Transparência amplia <strong>acesso à informação e controle social</strong>."},
+{question:"Uma meta deve, preferencialmente, ser:",options:["Clara e mensurável","Sempre secreta","Impossível de verificar","Sem prazo ou critério"],correct:0,explanation:"Metas claras e <strong>mensuráveis</strong> facilitam acompanhamento."}];
+    const eticaQuestions=[
+{question:"Ética no serviço público envolve:",options:["Conduta responsável orientada ao interesse público","Favorecimento pessoal","Uso privado obrigatório de recursos públicos","Ocultação de conflitos"],correct:0,explanation:"A ética pública orienta condutas responsáveis voltadas ao <strong>interesse público</strong>."},
+{question:"Cidadania está relacionada ao exercício de:",options:["Direitos e deveres na sociedade","Somente consumo","Somente atividades esportivas","Apenas relações comerciais"],correct:0,explanation:"Cidadania envolve <strong>direitos, deveres e participação social</strong>."},
+{question:"Conflito de interesses pode ocorrer quando:",options:["Interesse privado interfere no dever funcional","Há cumprimento imparcial do dever","Uma norma é publicada","Um cidadão solicita informação"],correct:0,explanation:"Há conflito quando interesses particulares podem <strong>interferir na função</strong>."},
+{question:"Tratar usuários com respeito e urbanidade é compatível com ética profissional?",options:["Sim","Não","Somente em dias úteis","Apenas para superiores"],correct:0,explanation:"<strong>Respeito e urbanidade</strong> são compatíveis com boa conduta profissional."},
+{question:"Prestação de contas contribui para:",options:["Responsabilização e transparência","Eliminar registros","Impedir fiscalização","Ocultar despesas"],correct:0,explanation:"Prestação de contas fortalece <strong>transparência e responsabilização</strong>."},
+{question:"Imparcialidade significa evitar favorecimento indevido?",options:["Sim","Não","Somente no setor privado","Apenas em provas"],correct:0,explanation:"Imparcialidade exige atuação sem <strong>favorecimentos indevidos</strong>."}];
+    const bnbQuestions=[
+{question:"O Banco do Nordeste do Brasil é conhecido pela sigla:",options:["BNB","BCB","BND","BBN"],correct:0,explanation:"Banco do Nordeste do Brasil é identificado pela sigla <strong>BNB</strong>."},
+{question:"A atuação do BNB está fortemente associada a qual objetivo?",options:["Desenvolvimento regional","Emissão de moeda nacional","Fiscalização de eleições","Controle do espaço aéreo"],correct:0,explanation:"O BNB tem atuação ligada ao <strong>desenvolvimento regional</strong>."},
+{question:"Crédito para atividades produtivas pode contribuir para:",options:["Investimento e geração de renda","Apagar registros contábeis","Eliminar toda concorrência","Substituir moeda"],correct:0,explanation:"Crédito produtivo pode apoiar <strong>investimento, produção e renda</strong>."},
+{question:"Microcrédito produtivo é voltado, em essência, ao apoio de:",options:["Pequenas atividades produtivas","Somente grandes governos estrangeiros","Emissão de passaportes","Serviços militares"],correct:0,explanation:"Microcrédito produtivo busca apoiar <strong>pequenos empreendimentos e atividades produtivas</strong>."},
+{question:"Desenvolvimento regional pode envolver financiamento a setores produtivos?",options:["Sim","Não","Apenas esportes","Somente importações pessoais"],correct:0,explanation:"Financiamento de atividades produtivas é um instrumento possível de <strong>desenvolvimento regional</strong>."},
+{question:"Ao estudar uma instituição financeira pública, é importante distinguir banco de desenvolvimento regional de:",options:["Autoridade monetária","Cliente bancário","Cartão de débito","Conta corrente"],correct:0,explanation:"Uma instituição de desenvolvimento não se confunde com a <strong>autoridade monetária</strong> do país."}];
+    const economiaQuestions=[
+{question:"Inflação é, em termos gerais:",options:["Aumento persistente do nível geral de preços","Queda obrigatória de todos os preços","Aumento da população","Redução de impostos apenas"],correct:0,explanation:"Inflação corresponde ao <strong>aumento generalizado/persistente do nível de preços</strong>."},
+{question:"PIB mede, de forma resumida:",options:["Valor de bens e serviços finais produzidos em uma economia","Somente salários públicos","Apenas exportações","Quantidade de moeda física"],correct:0,explanation:"O PIB mensura o valor dos <strong>bens e serviços finais produzidos</strong> em determinado período."},
+{question:"Taxa de câmbio relaciona preços entre:",options:["Moedas diferentes","Dois produtos idênticos","Salário e férias","Impostos municipais"],correct:0,explanation:"Câmbio expressa uma relação de valor entre <strong>moedas</strong>."},
+{question:"Política monetária está associada, entre outros aspectos, a:",options:["Moeda e condições de crédito","Construção de estradas apenas","Currículo escolar","Zoneamento urbano"],correct:0,explanation:"Política monetária atua sobre <strong>moeda, juros e condições monetárias</strong>."},
+{question:"Política fiscal envolve principalmente decisões sobre:",options:["Receitas e despesas públicas","Senhas bancárias","Protocolos de internet","Previsão do tempo"],correct:0,explanation:"Política fiscal envolve <strong>arrecadação e gastos públicos</strong>."},
+{question:"Quando o poder de compra da moeda cai por aumento geral de preços, há relação com:",options:["Inflação","Backup","DNS","Depreciação física de máquinas apenas"],correct:0,explanation:"A inflação reduz o <strong>poder de compra</strong> da moeda, mantidas as demais condições."}];
+    const contabilidadeQuestions=[
+{question:"Ativo representa, em termos contábeis, principalmente:",options:["Bens e direitos","Somente dívidas","Apenas receitas futuras","Somente impostos"],correct:0,explanation:"O ativo reúne <strong>bens e direitos</strong> controlados pela entidade, conforme critérios contábeis."},
+{question:"Passivo está associado principalmente a:",options:["Obrigações","Bens de uso","Receitas recebidas sempre","Capital físico apenas"],correct:0,explanation:"O passivo representa <strong>obrigações</strong> da entidade."},
+{question:"Patrimônio líquido corresponde, de forma simplificada, a:",options:["Ativo menos passivo","Ativo mais passivo sempre","Receita menos caixa","Somente dinheiro em espécie"],correct:0,explanation:"Na equação patrimonial básica, PL=<strong>Ativo − Passivo</strong>."},
+{question:"Receita tende a provocar, mantidos os demais fatores:",options:["Aumento do patrimônio líquido","Redução obrigatória do ativo","Extinção do passivo","Fim do caixa"],correct:0,explanation:"Receitas tendem a <strong>aumentar o patrimônio líquido</strong>."},
+{question:"Despesa tende a provocar, mantidos os demais fatores:",options:["Redução do patrimônio líquido","Aumento obrigatório do capital","Extinção das obrigações","Aumento automático do ativo"],correct:0,explanation:"Despesas tendem a <strong>reduzir o patrimônio líquido</strong>."},
+{question:"O balanço patrimonial evidencia:",options:["Ativos, passivos e patrimônio líquido","Somente vendas","Somente impostos","Apenas fluxo de internet"],correct:0,explanation:"O balanço apresenta a posição de <strong>ativos, passivos e patrimônio líquido</strong>."}];
+    const maranhaoQuestions=[
+{question:"A capital do Maranhão é:",options:["São Luís","Imperatriz","Caxias","Bacabal"],correct:0,explanation:"A capital maranhense é <strong>São Luís</strong>."},
+{question:"O Maranhão pertence a qual região brasileira?",options:["Nordeste","Norte","Centro-Oeste","Sul"],correct:0,explanation:"O Maranhão integra a <strong>Região Nordeste</strong>."},
+{question:"Os Lençóis Maranhenses são conhecidos principalmente por:",options:["Dunas e lagoas sazonais","Vulcões ativos","Geleiras","Cânions nevados"],correct:0,explanation:"A paisagem dos Lençóis Maranhenses é marcada por <strong>dunas e lagoas</strong>."},
+{question:"O centro histórico de São Luís é conhecido por conjunto arquitetônico de influência:",options:["Colonial portuguesa","Inca","Viking","Japonesa feudal"],correct:0,explanation:"São Luís preserva importante conjunto de <strong>arquitetura colonial portuguesa</strong>."},
+{question:"Caxias é um município localizado em qual estado?",options:["Maranhão","Piauí","Ceará","Pará"],correct:0,explanation:"Caxias está localizada no <strong>Maranhão</strong>."},
+{question:"O bumba meu boi é uma manifestação cultural fortemente associada ao:",options:["Maranhão","Acre apenas","Distrito Federal apenas","Exterior do Brasil apenas"],correct:0,explanation:"O <strong>bumba meu boi</strong> tem grande importância na cultura maranhense."}];
+    const meioAmbienteQuestions=[
+{question:"Desenvolvimento sustentável busca conciliar:",options:["Aspectos econômicos, sociais e ambientais","Somente lucro imediato","Somente consumo","Apenas expansão urbana"],correct:0,explanation:"Sustentabilidade busca equilíbrio entre dimensões <strong>econômica, social e ambiental</strong>."},
+{question:"Reciclagem consiste em:",options:["Transformar resíduos em novos materiais/produtos","Queimar todo resíduo","Descartar em rios","Misturar rejeitos perigosos"],correct:0,explanation:"Reciclagem reaproveita materiais por meio de <strong>processamento e transformação</strong>."},
+{question:"Biodiversidade refere-se à variedade de:",options:["Seres vivos e ecossistemas","Somente rochas","Apenas prédios","Moedas"],correct:0,explanation:"Biodiversidade abrange a <strong>diversidade biológica</strong> em diferentes níveis."},
+{question:"Uma fonte renovável de energia é:",options:["Solar","Carvão mineral","Petróleo","Gás natural"],correct:0,explanation:"A energia <strong>solar</strong> é considerada renovável."},
+{question:"Desmatamento pode causar:",options:["Perda de habitats","Aumento automático da biodiversidade","Criação de oceanos","Fim da erosão"],correct:0,explanation:"O desmatamento pode provocar <strong>perda e fragmentação de habitats</strong>."},
+{question:"Uso racional da água significa:",options:["Evitar desperdícios e usar com eficiência","Deixar torneiras abertas","Contaminar mananciais","Eliminar tratamento"],correct:0,explanation:"Uso racional busca <strong>eficiência e redução de desperdícios</strong>."}];
+    const atualidadesQuestions=[
+{question:"Para avaliar uma notícia atual, uma boa prática é:",options:["Verificar fonte, data e evidências","Compartilhar só pelo título","Ignorar autoria","Confiar em qualquer print"],correct:0,explanation:"Checar <strong>fonte, data, contexto e evidências</strong> ajuda a avaliar informações atuais."},
+{question:"Desinformação pode ser combatida com:",options:["Verificação em fontes confiáveis","Reenvio imediato","Remoção do contexto","Leitura apenas de manchetes"],correct:0,explanation:"A <strong>verificação cruzada</strong> em fontes confiáveis reduz o risco de desinformação."},
+{question:"Em notícias econômicas, a sigla PIB refere-se a:",options:["Produto Interno Bruto","Programa Internacional Bancário","Preço Interno Básico","Plano de Investimento Brasileiro"],correct:0,explanation:"PIB significa <strong>Produto Interno Bruto</strong>."},
+{question:"Ao comparar dados de anos diferentes, é importante observar:",options:["Período, metodologia e fonte","Somente a cor do gráfico","A quantidade de anúncios","O tamanho da tela"],correct:0,explanation:"Comparações responsáveis exigem atenção a <strong>período, metodologia e fonte</strong>."},
+{question:"Uma fonte primária é, em geral:",options:["Documento ou dado original","Comentário sem referência","Boato replicado","Resumo sem fonte"],correct:0,explanation:"Fonte primária apresenta <strong>registro, documento ou dado original</strong>."},
+{question:"Uma manchete isolada é suficiente para compreender um tema complexo?",options:["Não","Sim, sempre","Somente em redes sociais","Somente se estiver em maiúsculas"],correct:0,explanation:"Temas complexos exigem <strong>contexto e leitura além da manchete</strong>."}];
+    const segurancaQuestions=[
+{question:"Autenticação de dois fatores adiciona:",options:["Uma etapa extra de verificação","Um vírus","Uma senha pública","Um cabo de rede"],correct:0,explanation:"2FA adiciona uma <strong>segunda etapa de autenticação</strong>."},
+{question:"Phishing tenta frequentemente:",options:["Enganar para obter dados sensíveis","Aumentar RAM","Resfriar CPU","Compactar arquivos"],correct:0,explanation:"Phishing usa fraude e engenharia social para <strong>capturar informações</strong>."},
+{question:"Uma senha mais segura tende a ser:",options:["Longa, única e difícil de adivinhar","123456","A mesma em todos os sites","O próprio nome"],correct:0,explanation:"Senhas <strong>longas e únicas</strong> reduzem riscos de reutilização e adivinhação."},
+{question:"Backup serve principalmente para:",options:["Recuperar dados após perda ou incidente","Acelerar a internet","Trocar a CPU","Criar vírus"],correct:0,explanation:"Backup mantém cópias para <strong>recuperação de dados</strong>."},
+{question:"Ransomware costuma:",options:["Criptografar/bloquear dados e exigir resgate","Limpar teclado","Melhorar bateria","Atualizar BIOS automaticamente"],correct:0,explanation:"Ransomware pode <strong>bloquear ou criptografar dados</strong> e exigir pagamento."},
+{question:"Atualizações de segurança são importantes porque:",options:["Podem corrigir vulnerabilidades","Sempre apagam arquivos","Desligam o firewall","Tornam senhas públicas"],correct:0,explanation:"Atualizações frequentemente corrigem <strong>falhas e vulnerabilidades</strong>."}];
+    const iaQuestions=[
+{question:"Inteligência artificial generativa é capaz de:",options:["Gerar novos conteúdos a partir de padrões aprendidos","Apenas armazenar arquivos","Somente imprimir documentos","Substituir a internet"],correct:0,explanation:"IA generativa pode <strong>produzir texto, imagens e outros conteúdos</strong> a partir de padrões aprendidos."},
+{question:"Computação em nuvem permite, entre outras coisas:",options:["Usar recursos computacionais pela rede","Eliminar redes","Funcionar sem servidores","Dispensar segurança"],correct:0,explanation:"A nuvem disponibiliza <strong>recursos computacionais via rede</strong>."},
+{question:"Machine learning é uma área relacionada a sistemas que:",options:["Aprendem padrões a partir de dados","Apenas montam computadores","Trocam cabos","Imprimem papel"],correct:0,explanation:"Aprendizado de máquina utiliza dados para <strong>identificar padrões e realizar tarefas</strong>."},
+{question:"Um prompt, em sistemas de IA generativa, é:",options:["Uma instrução ou entrada fornecida ao modelo","Um tipo de monitor","Uma placa-mãe","Um protocolo de e-mail"],correct:0,explanation:"Prompt é a <strong>entrada/instrução</strong> dada ao sistema de IA."},
+{question:"Automação busca:",options:["Executar tarefas com menor intervenção manual","Aumentar tarefas repetitivas manuais","Eliminar todo software","Impedir integração"],correct:0,explanation:"Automação permite que processos sejam executados com <strong>menos intervenção manual</strong>."},
+{question:"Ao usar IA, é importante verificar respostas porque modelos podem:",options:["Produzir informações incorretas","Ser infalíveis","Acessar sempre qualquer dado privado","Garantir verdade absoluta"],correct:0,explanation:"Resultados de IA devem ser verificados, pois modelos podem <strong>errar ou gerar informações imprecisas</strong>."}];
+
     /* =====================================================
        ELEMENTOS
     ===================================================== */
@@ -1773,6 +1876,14 @@
        INICIAR JOGO
     ===================================================== */
 
+    function filterSubjects(category, button) {
+        document.querySelectorAll('.category-tab').forEach(tab => tab.classList.remove('active'));
+        if (button) button.classList.add('active');
+        document.querySelectorAll('.subject-card[data-category]').forEach(card => {
+            card.classList.toggle('hidden', category !== 'todas' && card.dataset.category !== category);
+        });
+    }
+
     function selectSubject(subject) {
         currentSubject = subject;
         startGame();
@@ -1805,7 +1916,22 @@
             ciencias: { questions: scienceQuestions, name: "Ciências", icon: "🔬" },
             geografia: { questions: geographyQuestions, name: "Geografia", icon: "🌎" },
             historia: { questions: historyQuestions, name: "História do Brasil e Maranhão", icon: "🏛️" },
-            bancarios: { questions: bankingQuestions, name: "Conhecimentos Bancários", icon: "🏦" }
+            bancarios: { questions: bankingQuestions, name: "Conhecimentos Bancários", icon: "🏦" },
+            redacao: { questions: redacaoQuestions, name: "Redação e Interpretação", icon: "✍️" },
+            matfinanceira: { questions: matFinanceiraQuestions, name: "Matemática Financeira", icon: "💹" },
+            estatistica: { questions: estatisticaQuestions, name: "Estatística", icon: "📊" },
+            constitucional: { questions: constitucionalQuestions, name: "Direito Constitucional", icon: "⚖️" },
+            administrativo: { questions: administrativoQuestions, name: "Direito Administrativo", icon: "📜" },
+            admpublica: { questions: admPublicaQuestions, name: "Administração Pública", icon: "🏛️" },
+            etica: { questions: eticaQuestions, name: "Ética e Cidadania", icon: "🤝" },
+            bnb: { questions: bnbQuestions, name: "Conhecimentos sobre o BNB", icon: "🏦" },
+            economia: { questions: economiaQuestions, name: "Economia", icon: "💵" },
+            contabilidade: { questions: contabilidadeQuestions, name: "Contabilidade Básica", icon: "🧮" },
+            maranhao: { questions: maranhaoQuestions, name: "Conhecimentos do Maranhão", icon: "🗺️" },
+            meioambiente: { questions: meioAmbienteQuestions, name: "Meio Ambiente", icon: "🌱" },
+            atualidades: { questions: atualidadesQuestions, name: "Atualidades", icon: "📰" },
+            seguranca: { questions: segurancaQuestions, name: "Segurança da Informação", icon: "🔐" },
+            ia: { questions: iaQuestions, name: "Tecnologia e IA", icon: "🤖" }
         };
         const selectedSubject = subjectData[currentSubject] || subjectData.portugues;
         shuffledQuestions = shuffleArray(selectedSubject.questions);
