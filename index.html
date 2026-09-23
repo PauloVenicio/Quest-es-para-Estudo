@@ -2095,7 +2095,7 @@
 
         const q = shuffledQuestions[currentQuestion];
 
-        document.getElementById("questionTitle").textContent = currentSubject === "portugues" ? "Qual das palavras está escrita corretamente?" : q.question;
+        document.getElementById("questionTitle").textContent = q.question;
         document.getElementById("questionInstruction").textContent = "Escolha a alternativa correta:";
 
         /*
@@ -2332,23 +2332,47 @@
     function showLevelUp() {
 
         /*
-            Pequeno feedback visual.
+            Exibe o aviso de nível sem substituir o enunciado da questão.
+            Assim, mesmo que o jogador avance rapidamente, pergunta e
+            alternativas continuam sempre sincronizadas.
         */
 
-        const title = document.querySelector(".question-card h2");
-        const oldText = title.textContent;
+        let notice = document.getElementById("levelUpNotice");
 
-        title.textContent =
-            `🎉 NÍVEL ${level} DESBLOQUEADO!`;
+        if (!notice) {
+            notice = document.createElement("div");
+            notice.id = "levelUpNotice";
+            notice.style.cssText = `
+                position: fixed;
+                left: 50%;
+                top: 82px;
+                transform: translateX(-50%) translateY(-12px);
+                z-index: 9999;
+                padding: 11px 18px;
+                border-radius: 999px;
+                background: rgba(24, 32, 48, .96);
+                color: #55efc4;
+                border: 1px solid rgba(85, 239, 196, .45);
+                box-shadow: 0 10px 30px rgba(0,0,0,.28);
+                font-weight: 800;
+                font-size: 14px;
+                text-align: center;
+                pointer-events: none;
+                opacity: 0;
+                transition: opacity .2s ease, transform .2s ease;
+            `;
+            document.body.appendChild(notice);
+        }
 
-        title.style.color = "#55efc4";
+        notice.textContent = `🎉 NÍVEL ${level} DESBLOQUEADO!`;
+        notice.style.opacity = "1";
+        notice.style.transform = "translateX(-50%) translateY(0)";
 
-        setTimeout(() => {
-
-            title.textContent = oldText;
-            title.style.color = "";
-
-        }, 1300);
+        clearTimeout(window.levelUpNoticeTimer);
+        window.levelUpNoticeTimer = setTimeout(() => {
+            notice.style.opacity = "0";
+            notice.style.transform = "translateX(-50%) translateY(-12px)";
+        }, 1600);
     }
 
 
