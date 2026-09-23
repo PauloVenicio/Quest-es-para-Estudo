@@ -739,6 +739,61 @@
         .category-tabs{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;margin:18px 0 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch;position:sticky;top:0;z-index:2;background:linear-gradient(#111827 70%,transparent)}
         .category-tabs::-webkit-scrollbar{display:none}.category-tab{flex:0 0 auto;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:var(--muted);padding:10px 13px;border-radius:999px;font-weight:700;cursor:pointer}.category-tab.active{color:white;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-color:transparent}.subject-card.hidden{display:none}
         @media(max-width:650px){.category-tabs{margin:12px -2px 2px;padding-bottom:7px}.category-tab{padding:9px 11px;font-size:12px}.subject-card small{max-height:2.6em;overflow:hidden}}
+
+        /* Rodapé: controles discretos */
+        .footer-controls {
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            gap:8px;
+            margin-bottom:10px;
+        }
+        .footer-control-btn {
+            border:1px solid rgba(255,255,255,.10);
+            background:rgba(255,255,255,.05);
+            color:var(--muted);
+            border-radius:10px;
+            padding:7px 10px;
+            font:inherit;
+            font-size:12px;
+            cursor:pointer;
+            transition:.2s ease;
+            touch-action:manipulation;
+        }
+        .footer-control-btn:hover {
+            color:var(--text);
+            background:rgba(255,255,255,.09);
+        }
+        body.light-mode {
+            --dark:#f8fafc; --dark-2:#e2e8f0; --text:#172033; --muted:#64748b;
+            --card:rgba(255,255,255,.94);
+            background:radial-gradient(circle at 10% 20%,rgba(108,92,231,.12),transparent 30%),
+                       radial-gradient(circle at 90% 80%,rgba(0,206,201,.10),transparent 30%),#eef2f7;
+            color:var(--text);
+        }
+        body.light-mode .start-card, body.light-mode .modal-card { background:rgba(255,255,255,.96); }
+        body.light-mode header { background:rgba(248,250,252,.90); }
+        body.light-mode .category-tabs { background:linear-gradient(rgba(255,255,255,.97) 70%, transparent); }
+        body.light-mode .category-tab { background:rgba(15,23,42,.04); border-color:rgba(15,23,42,.10); color:var(--muted); }
+        body.light-mode .category-tab.active { color:#fff; background:linear-gradient(135deg,var(--primary),var(--primary-dark)); border-color:transparent; }
+        body.light-mode .subject-card, body.light-mode .rule, body.light-mode .stat,
+        body.light-mode .ranking-item, body.light-mode .footer-control-btn {
+            background:rgba(15,23,42,.04); border-color:rgba(15,23,42,.09); color:var(--text);
+        }
+        body.light-mode .btn-ranking {
+            background:rgba(108,92,231,.10);
+            border-color:rgba(108,92,231,.25);
+            color:#352b8f;
+        }
+        body.light-mode .btn-ranking:hover {
+            background:rgba(108,92,231,.16);
+            color:#241b73;
+        }
+        body.light-mode .answer { background:rgba(15,23,42,.035); color:var(--text); border-color:rgba(15,23,42,.10); }
+        body.light-mode .home-btn { color:var(--muted); border-color:rgba(15,23,42,.12); }
+        body.light-mode footer { border-top-color:rgba(15,23,42,.08) !important; }
+        @media (max-width:650px){ .footer-control-btn{padding:7px 9px;font-size:11px;} }
+
     </style>
 </head>
 
@@ -2467,9 +2522,29 @@
 </script>
 
 
-<footer style="text-align:center;padding:22px 15px;color:#94a3b8;font-size:13px;border-top:1px solid rgba(255,255,255,.06);">
+<footer style="text-align:center;padding:18px 15px 22px;color:var(--muted);font-size:13px;border-top:1px solid rgba(255,255,255,.06);">
+    <div class="footer-controls">
+        <button class="footer-control-btn" type="button" onclick="scrollToTop()" aria-label="Voltar ao topo">↑ Topo</button>
+        <button class="footer-control-btn" id="themeToggle" type="button" onclick="toggleTheme()" aria-label="Alternar modo claro e noturno">☀️ Modo claro</button>
+    </div>
     Copyright 2026 Paulo Carvalho Dev
 </footer>
+<script>
+function scrollToTop(){ window.scrollTo({top:0, behavior:'smooth'}); }
+function applySavedTheme(){
+    const light = localStorage.getItem('centralConhecimentoTheme') === 'light';
+    document.body.classList.toggle('light-mode', light);
+    const btn=document.getElementById('themeToggle');
+    if(btn) btn.textContent = light ? '🌙 Modo noturno' : '☀️ Modo claro';
+}
+function toggleTheme(){
+    const light=document.body.classList.toggle('light-mode');
+    localStorage.setItem('centralConhecimentoTheme', light ? 'light' : 'dark');
+    const btn=document.getElementById('themeToggle');
+    if(btn) btn.textContent = light ? '🌙 Modo noturno' : '☀️ Modo claro';
+}
+applySavedTheme();
+</script>
 
 </body>
 </html>
