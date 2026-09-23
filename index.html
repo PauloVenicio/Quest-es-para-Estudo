@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Estude Fácil - Português, Matemática, Informática, Raciocínio Lógico, Inglês, Ciências, Geografia e História</title>
+    <title>Estude Fácil - Português, Matemática, Informática, Raciocínio Lógico, Inglês, Espanhol, Ciências, Geografia e História</title>
 
     <meta name="description"
-          content="Quiz interativo com Português, Matemática, Informática, Raciocínio Lógico, Inglês, Ciências, Geografia e História do Brasil e do Maranhão.">
+          content="Quiz interativo com Português, Matemática, Informática, Raciocínio Lógico, Inglês, Espanhol, Ciências, Geografia e História do Brasil e do Maranhão.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -874,6 +874,7 @@
                 <button class="subject-card math" data-category="basicas" onclick="selectSubject('matematica')"><div class="subject-icon">➗</div><strong>Matemática</strong><small>Cálculos, porcentagem, frações e problemas.</small></button>
                 <button class="subject-card logic" data-category="basicas" onclick="selectSubject('logica')"><div class="subject-icon">🧠</div><strong>Raciocínio Lógico</strong><small>Sequências, proposições, conjuntos e lógica.</small></button>
                 <button class="subject-card english" data-category="basicas" onclick="selectSubject('ingles')"><div class="subject-icon">🇺🇸</div><strong>Inglês</strong><small>Vocabulário, gramática e interpretação.</small></button>
+                <button class="subject-card english" data-category="basicas" onclick="selectSubject('espanhol')"><div class="subject-icon">🇪🇸</div><strong>Espanhol</strong><small>Vocabulário, gramática e interpretação.</small></button>
                 <button class="subject-card" data-category="basicas" onclick="selectSubject('redacao')"><div class="subject-icon">✍️</div><strong>Redação e Interpretação</strong><small>Coesão, coerência e compreensão textual.</small></button>
                 <button class="subject-card math" data-category="basicas" onclick="selectSubject('matfinanceira')"><div class="subject-icon">💹</div><strong>Matemática Financeira</strong><small>Juros, descontos e porcentagens.</small></button>
                 <button class="subject-card" data-category="basicas" onclick="selectSubject('estatistica')"><div class="subject-icon">📊</div><strong>Estatística</strong><small>Média, mediana, gráficos e probabilidade.</small></button>
@@ -1341,6 +1342,32 @@
         {words:["Perspectiva","Pespectiva"],correct:0,explanation:"A grafia correta é <strong>perspectiva</strong>."},
         {words:["Suscetível","Sussetível"],correct:0,explanation:"A forma correta é <strong>suscetível</strong>."}
 
+        ,{question:"Assinale a alternativa em que todas as palavras estão corretamente acentuadas.",options:["lâmpada, trânsito, ônibus, saúde","lampada, trânsito, onibus, saude","lâmpada, transito, ônibus, saude","lampada, transito, onibus, saúde"],correct:0,explanation:"As formas corretas são <strong>lâmpada, trânsito, ônibus e saúde</strong>."}
+        ,{question:"Em qual alternativa há um substantivo abstrato?",options:["Casa","Beleza","Caderno","Árvore"],correct:1,explanation:"<strong>Beleza</strong> nomeia uma qualidade e é um substantivo abstrato."}
+        ,{question:"Na frase 'Os alunos estudaram bastante', qual é o sujeito?",options:["estudaram","bastante","Os alunos","alunos estudaram"],correct:2,explanation:"Quem pratica a ação de estudar é <strong>Os alunos</strong>."}
+        ,{question:"Assinale a frase com concordância verbal correta.",options:["Fazem dois anos que estudo aqui.","Faz dois anos que estudo aqui.","Houveram muitos problemas.","Existe muitas soluções."],correct:1,explanation:"Indicando tempo decorrido, o verbo <strong>fazer</strong> é impessoal: Faz dois anos."}
+        ,{question:"Qual alternativa apresenta o uso correto de 'por que'?",options:["Não fui porque estava doente.","Por que você chegou tarde?","Você faltou por quê motivo?","Ninguém explicou o por que."],correct:1,explanation:"Em pergunta direta, usa-se <strong>por que</strong>: Por que você chegou tarde?"}
+        ,{question:"Complete corretamente: 'Não sei ___ ele faltou.'",options:["porque","porquê","por que","por quê"],correct:2,explanation:"Em pergunta indireta, emprega-se <strong>por que</strong>."}
+        ,{question:"Assinale a alternativa em que o uso da crase está correto.",options:["Vou à escola cedo.","Entreguei à ele o documento.","Cheguei à pé.","Começou à chover."],correct:0,explanation:"Em <strong>à escola</strong>, ocorre a fusão da preposição a com o artigo a."}
+        ,{question:"Qual palavra é um advérbio?",options:["rápido","rapidamente","rapidez","apressado"],correct:1,explanation:"<strong>Rapidamente</strong> é advérbio de modo."}
+        ,{question:"Em 'Paulo comprou um computador novo', a palavra 'novo' é:",options:["verbo","substantivo","adjetivo","advérbio"],correct:2,explanation:"<strong>Novo</strong> caracteriza o substantivo computador, portanto é adjetivo."}
+        ,{question:"Assinale a alternativa com pontuação adequada.",options:["Paulo venha aqui.","Paulo, venha aqui.","Paulo venha, aqui.","Paulo; venha, aqui."],correct:1,explanation:"O vocativo <strong>Paulo</strong> deve ser separado por vírgula."}
+        ,{question:"Qual é o plural correto de 'cidadão'?",options:["cidadões","cidadães","cidadãos","cidadãoses"],correct:2,explanation:"O plural de <strong>cidadão</strong> é cidadãos."}
+        ,{question:"Assinale a alternativa com pronome demonstrativo.",options:["meu","aquele","quem","ninguém"],correct:1,explanation:"<strong>Aquele</strong> é pronome demonstrativo."}
+        ,{question:"Em 'O livro que comprei é excelente', a palavra 'que' retoma:",options:["comprei","excelente","livro","eu"],correct:2,explanation:"O pronome relativo <strong>que</strong> retoma o antecedente livro."}
+        ,{question:"Qual alternativa contém uma oração com sentido de causa?",options:["Estudei para passar.","Como estava chovendo, fiquei em casa.","Quando cheguei, ele saiu.","Embora cansado, trabalhou."],correct:1,explanation:"<strong>Como estava chovendo</strong> apresenta a causa de ter ficado em casa."}
+        ,{question:"Assinale a forma verbal correta.",options:["Se eu ver o documento, aviso.","Se eu vir o documento, aviso.","Se eu vim o documento, aviso.","Se eu verei o documento, aviso."],correct:1,explanation:"O futuro do subjuntivo do verbo ver é <strong>vir</strong>: se eu vir."}
+        ,{question:"Qual alternativa apresenta linguagem denotativa?",options:["Meu coração é um deserto.","A lua sorria para nós.","A água ferve a 100 °C ao nível do mar.","Ele tem nervos de aço."],correct:2,explanation:"A linguagem <strong>denotativa</strong> emprega as palavras em sentido literal."}
+        ,{question:"Em 'Ele é forte como um touro', ocorre:",options:["metáfora","comparação","ironia","eufemismo"],correct:1,explanation:"A presença do conectivo <strong>como</strong> estabelece uma comparação explícita."}
+        ,{question:"Qual palavra está corretamente grafada?",options:["Privilégio","Previlegio","Priviléjio","Previlejio"],correct:0,explanation:"A grafia correta é <strong>privilégio</strong>."}
+        ,{question:"Assinale a alternativa em que há concordância nominal correta.",options:["É proibido a entrada.","É proibida a entrada.","Seguem anexo as fotos.","Ela mesmo resolveu."],correct:1,explanation:"Com artigo definido, o adjetivo concorda: <strong>É proibida a entrada</strong>."}
+        ,{question:"Na frase 'Precisa-se de funcionários', o sujeito é:",options:["funcionários","oculto","indeterminado","inexistente"],correct:2,explanation:"Com verbo transitivo indireto + se, o <strong>sujeito é indeterminado</strong>."}
+        ,{question:"Assinale a alternativa em que 'há' foi empregado corretamente.",options:["Há três dias não chove.","Hão três dias não chove.","Daqui há três dias viajarei.","Cheguei há São Luís ontem."],correct:0,explanation:"Para indicar tempo decorrido, usa-se o impessoal <strong>há</strong>."}
+        ,{question:"Qual alternativa contém uma conjunção adversativa?",options:["porque","portanto","mas","quando"],correct:2,explanation:"<strong>Mas</strong> é conjunção coordenativa adversativa."}
+        ,{question:"Em 'Estudou muito, portanto foi aprovado', 'portanto' indica:",options:["causa","conclusão","oposição","condição"],correct:1,explanation:"<strong>Portanto</strong> introduz uma conclusão."}
+        ,{question:"Qual é o antônimo de 'efêmero'?",options:["passageiro","duradouro","breve","momentâneo"],correct:1,explanation:"<strong>Efêmero</strong> significa passageiro; seu antônimo é duradouro."}
+        ,{question:"Assinale a frase em que o verbo está na voz passiva.",options:["O técnico consertou o computador.","O computador foi consertado pelo técnico.","O técnico conserta computadores.","Consertaram o computador."],correct:1,explanation:"Em <strong>foi consertado pelo técnico</strong>, o sujeito sofre a ação: voz passiva analítica."}
+
     ];
 
     const mathQuestions = [
@@ -1611,6 +1638,41 @@
     let correctAnswers = 0;
     let playerName = localStorage.getItem("desafio_escolar_nome") || localStorage.getItem("desafio_portugues_nome") || "";
     let shuffledQuestions = [];
+
+
+    const spanishQuestions = [
+{question:"¿Cómo se dice 'bom dia' en español?",options:["Buenas noches","Buenos días","Buenas tardes","Hasta luego"],correct:1,explanation:"<strong>Buenos días</strong> corresponde a 'bom dia'."},
+{question:"La palabra 'gracias' significa:",options:["desculpa","obrigado(a)","por favor","até logo"],correct:1,explanation:"<strong>Gracias</strong> significa obrigado(a)."},
+{question:"Complete: Yo ___ brasileño.",options:["eres","soy","es","somos"],correct:1,explanation:"Com <strong>yo</strong>, o verbo ser é <strong>soy</strong>."},
+{question:"Complete: Tú ___ mi amigo.",options:["soy","eres","es","son"],correct:1,explanation:"Com <strong>tú</strong>, usamos <strong>eres</strong>."},
+{question:"Complete: Ella ___ en Caxias.",options:["vivo","vives","vive","vivimos"],correct:2,explanation:"Com <strong>ella</strong>, vivir no presente é <strong>vive</strong>."},
+{question:"¿Cuál es el plural de 'libro'?",options:["libres","libros","libroes","libras"],correct:1,explanation:"O plural regular é <strong>libros</strong>."},
+{question:"La traducción de 'casa' al portugués es:",options:["casa","carro","rua","escola"],correct:0,explanation:"Em espanhol, <strong>casa</strong> também significa casa."},
+{question:"¿Qué significa 'perro'?",options:["gato","pássaro","cachorro","peixe"],correct:2,explanation:"<strong>Perro</strong> significa cachorro."},
+{question:"¿Qué significa 'calle'?",options:["rua","casa","praça","cidade"],correct:0,explanation:"<strong>Calle</strong> significa rua."},
+{question:"Complete: Nosotros ___ español.",options:["hablo","hablas","hablamos","hablan"],correct:2,explanation:"Com <strong>nosotros</strong>, hablar fica <strong>hablamos</strong>."},
+{question:"El artículo definido masculino singular es:",options:["la","los","el","las"],correct:2,explanation:"O artigo masculino singular é <strong>el</strong>."},
+{question:"El artículo definido femenino plural es:",options:["el","la","los","las"],correct:3,explanation:"O artigo feminino plural é <strong>las</strong>."},
+{question:"¿Cuál es el número 'quince'?",options:["12","15","20","50"],correct:1,explanation:"<strong>Quince</strong> corresponde ao número 15."},
+{question:"¿Cuál es el número 'cien'?",options:["10","50","100","1000"],correct:2,explanation:"<strong>Cien</strong> corresponde a 100."},
+{question:"¿Qué día viene después del lunes?",options:["domingo","martes","miércoles","viernes"],correct:1,explanation:"Depois de lunes (segunda-feira) vem <strong>martes</strong> (terça-feira)."},
+{question:"¿Qué significa 'miércoles'?",options:["segunda-feira","terça-feira","quarta-feira","quinta-feira"],correct:2,explanation:"<strong>Miércoles</strong> significa quarta-feira."},
+{question:"La traducción de 'enero' es:",options:["janeiro","fevereiro","março","junho"],correct:0,explanation:"<strong>Enero</strong> significa janeiro."},
+{question:"¿Cuál palabra significa 'vermelho'?",options:["verde","rojo","negro","blanco"],correct:1,explanation:"<strong>Rojo</strong> significa vermelho."},
+{question:"¿Cuál palabra significa 'amarelo'?",options:["amarillo","azul","morado","gris"],correct:0,explanation:"<strong>Amarillo</strong> significa amarelo."},
+{question:"Complete: ¿___ te llamas?",options:["Qué","Cómo","Dónde","Cuándo"],correct:1,explanation:"A pergunta usual é <strong>¿Cómo te llamas?</strong>."},
+{question:"¿Qué significa '¿Dónde vives?'?",options:["Como você está?","Onde você mora?","Qual é seu nome?","Onde você trabalha?"],correct:1,explanation:"<strong>¿Dónde vives?</strong> significa 'Onde você mora?'."},
+{question:"Complete: Me ___ Paulo.",options:["llamo","llamas","llama","llamamos"],correct:0,explanation:"Para apresentar-se: <strong>Me llamo...</strong>."},
+{question:"El opuesto de 'grande' es:",options:["alto","pequeño","largo","fuerte"],correct:1,explanation:"O antônimo de grande é <strong>pequeño</strong>."},
+{question:"El opuesto de 'rápido' es:",options:["lento","fácil","corto","joven"],correct:0,explanation:"O antônimo de rápido é <strong>lento</strong>."},
+{question:"¿Cuál opción contiene un falso amigo para hablantes de portugués?",options:["familia","problema","embarazada","animal"],correct:2,explanation:"<strong>Embarazada</strong> significa grávida, não 'embaraçada'."},
+{question:"En español, 'apellido' significa:",options:["apelido","sobrenome","nome","endereço"],correct:1,explanation:"<strong>Apellido</strong> significa sobrenome."},
+{question:"En español, 'oficina' normalmente significa:",options:["oficina mecânica","escritório","hospital","loja"],correct:1,explanation:"<strong>Oficina</strong> normalmente significa escritório; oficina mecânica é 'taller'."},
+{question:"Complete: Ayer yo ___ al mercado.",options:["voy","fui","iré","iba a"],correct:1,explanation:"<strong>Ayer</strong> indica passado; o pretérito de ir na 1ª pessoa é <strong>fui</strong>."},
+{question:"Complete: Mañana ___ a estudiar.",options:["voy","fui","iba","he"],correct:0,explanation:"A construção <strong>ir a + infinitivo</strong> expressa futuro próximo: voy a estudiar."},
+{question:"¿Cuál oración está correctamente escrita?",options:["¿Como estás?","¿Cómo estás?","Como ¿estás?","¿Cómo estas."],correct:1,explanation:"A forma correta é <strong>¿Cómo estás?</strong>, com sinais de interrogação e acento em cómo."}
+    ];
+
     const scienceQuestions = [
 {question:"Qual organela celular é conhecida por produzir grande parte da energia utilizada pela célula?",options:["Mitocôndria","Ribossomo","Lisossomo","Núcleo"],correct:0,explanation:"A <strong>mitocôndria</strong> participa da respiração celular e da produção de ATP."},
 {question:"Qual gás é absorvido pelas plantas durante a fotossíntese?",options:["Oxigênio","Dióxido de carbono","Nitrogênio","Hidrogênio"],correct:1,explanation:"Na fotossíntese, as plantas utilizam <strong>dióxido de carbono (CO₂)</strong>, água e energia luminosa."},
@@ -1985,6 +2047,7 @@
             informatica: { questions: infoQuestions, name: "Informática", icon: "💻" },
             logica: { questions: logicQuestions, name: "Raciocínio Lógico", icon: "🧠" },
             ingles: { questions: englishQuestions, name: "Inglês", icon: "🇺🇸" },
+            espanhol: { questions: spanishQuestions, name: "Espanhol", icon: "🇪🇸" },
             ciencias: { questions: scienceQuestions, name: "Ciências", icon: "🔬" },
             geografia: { questions: geographyQuestions, name: "Geografia", icon: "🌎" },
             historia: { questions: historyQuestions, name: "História do Brasil e Maranhão", icon: "🏛️" },
@@ -2043,7 +2106,7 @@
 
         const answerButtons = [answer1, answer2, answer3, answer4];
         const wordSpans = [word1, word2, word3, word4];
-        const rawOptions = currentSubject === "portugues" ? q.words : q.options;
+        const rawOptions = q.options || q.words;
         let options = rawOptions.map((word, originalIndex) => ({ word, originalIndex }));
         options = shuffleArray(options);
 
@@ -2434,7 +2497,7 @@
                     <div>
                         <div class="ranking-name">${escapeHtml(item.name)}</div>
                         <span class="ranking-date">
-                            ${({portugues:"📚 Português", matematica:"➗ Matemática", informatica:"💻 Informática", logica:"🧠 Raciocínio Lógico", ingles:"🇺🇸 Inglês", ciencias:"🔬 Ciências", geografia:"🌎 Geografia", historia:"🏛️ História Brasil/MA"}[item.subject] || "📚 Português")} • ${item.correct} acertos • Nível ${item.level} • ${item.date}
+                            ${({portugues:"📚 Português", matematica:"➗ Matemática", informatica:"💻 Informática", logica:"🧠 Raciocínio Lógico", ingles:"🇺🇸 Inglês", espanhol:"🇪🇸 Espanhol", ciencias:"🔬 Ciências", geografia:"🌎 Geografia", historia:"🏛️ História Brasil/MA"}[item.subject] || "📚 Português")} • ${item.correct} acertos • Nível ${item.level} • ${item.date}
                         </span>
                     </div>
                     <div class="ranking-score">${item.score} pts</div>
