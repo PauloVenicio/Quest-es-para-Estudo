@@ -2145,8 +2145,16 @@
 
         const q = shuffledQuestions[currentQuestion];
 
-        document.getElementById("questionTitle").textContent = q.question;
-        document.getElementById("questionInstruction").textContent = "Escolha a alternativa correta:";
+        // As questões antigas de Português usam `words` (duas formas para comparar),
+        // enquanto as questões novas usam `question` + `options`.
+        // Mantemos os dois formatos para não perder nenhuma questão do banco.
+        const isWordQuestion = !q.question && Array.isArray(q.words);
+        document.getElementById("questionTitle").textContent = isWordQuestion
+            ? "Qual é a forma correta?"
+            : q.question;
+        document.getElementById("questionInstruction").textContent = isWordQuestion
+            ? "Escolha a palavra ou expressão escrita corretamente:"
+            : "Escolha a alternativa correta:";
 
         /*
             Embaralha as duas alternativas para que
@@ -2657,9 +2665,9 @@
         /*
             Tecla 3 ou C / Tecla 4 ou D (Matemática)
         */
-        if (currentSubject !== "portugues" && !answered) {
-            if (event.key === "3" || event.key.toLowerCase() === "c") checkAnswer(2);
-            if (event.key === "4" || event.key.toLowerCase() === "d") checkAnswer(3);
+        if (!answered) {
+            if ((event.key === "3" || event.key.toLowerCase() === "c") && answer3.style.display !== "none") checkAnswer(2);
+            if ((event.key === "4" || event.key.toLowerCase() === "d") && answer4.style.display !== "none") checkAnswer(3);
         }
 
         /*
