@@ -838,7 +838,7 @@
     <div class="modal-card ranking-card">
         <div class="result-icon">🏆</div>
         <h2>Ranking</h2>
-        <p>Melhores pontuações salvas neste dispositivo.</p>
+        <p>Ranking geral online. Se o servidor estiver indisponível, será exibido o ranking salvo neste dispositivo.</p>
         <div id="rankingList" class="ranking-list"></div>
         <button class="btn btn-primary" onclick="closeRanking()">
             FECHAR
@@ -1079,6 +1079,36 @@
 
 
 <script>
+
+    /* =====================================================
+       RANKING ONLINE - RASPBERRY PI
+    ===================================================== */
+    const RANKING_API_URL = "https://valuable-merely-pace-aug.trycloudflare.com";
+
+    function getPlayerId() {
+        let id = localStorage.getItem("central_conhecimento_player_id");
+        if (!id) {
+            id = (window.crypto && crypto.randomUUID)
+                ? crypto.randomUUID()
+                : `player-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+            localStorage.setItem("central_conhecimento_player_id", id);
+        }
+        return id;
+    }
+
+    const subjectLabels = {
+        portugues:"Português", matematica:"Matemática", informatica:"Informática",
+        logica:"Raciocínio Lógico", ingles:"Inglês", espanhol:"Espanhol",
+        ciencias:"Ciências", geografia:"Geografia", historia:"História do Brasil e Maranhão",
+        bancarios:"Conhecimentos Bancários", redacao:"Redação e Interpretação",
+        matfinanceira:"Matemática Financeira", estatistica:"Estatística",
+        constitucional:"Direito Constitucional", administrativo:"Direito Administrativo",
+        admpublica:"Administração Pública", etica:"Ética e Cidadania",
+        bnb:"Conhecimentos sobre o BNB", economia:"Economia",
+        contabilidade:"Contabilidade Básica", maranhao:"Conhecimentos do Maranhão",
+        meioambiente:"Meio Ambiente", atualidades:"Atualidades",
+        seguranca:"Segurança da Informação", ia:"Tecnologia e IA"
+    };
 
     /* =====================================================
        BANCO DE QUESTÕES
@@ -2453,6 +2483,7 @@
         document.getElementById("finalPlayer").textContent = `👤 ${playerName}`;
 
         saveRankingEntry();
+        saveOnlineRankingEntry();
 
         if (lives <= 0) {
 
@@ -2567,30 +2598,85 @@
         );
     }
 
-    function openRanking() {
-        const list = document.getElementById("rankingList");
-        const ranking = getRanking();
+    async function saveOnlineRankingEntry() {
+        if (!playerName) return;
 
+        try {
+            const response = await fetch(`${RANKING_API_URL}/api/score`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    player_id: getPlayerId(),
+                    nome: playerName,
+                    materia: subjectLabels[currentSubject] || currentSubject,
+                    pontos: score,
+                    acertos: correctAnswers,
+                    nivel: level,
+                    total_questoes: shuffledQuestions.length
+                })
+            });
+
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            console.log("Pontuação enviada ao ranking online.");
+        } catch (error) {
+            console.warn("Ranking online indisponível; pontuação mantida localmente.", error);
+        }
+    }
+
+    function renderLocalRanking(list) {
+        const ranking = getRanking();
         if (!ranking.length) {
             list.innerHTML = `<div class="ranking-empty">
-                Ainda não há pontuações. Jogue uma partida para aparecer aqui!
+                Ranking online indisponível e ainda não há pontuações salvas neste dispositivo.
             </div>`;
-        } else {
-            list.innerHTML = ranking.map((item, index) => `
+            return;
+        }
+        list.innerHTML = `<div class="ranking-empty">⚠️ Servidor online indisponível. Mostrando ranking deste dispositivo.</div>` +
+            ranking.map((item, index) => `
                 <div class="ranking-item">
                     <div class="ranking-position">${index + 1}º</div>
                     <div>
                         <div class="ranking-name">${escapeHtml(item.name)}</div>
                         <span class="ranking-date">
-                            ${({portugues:"📚 Português", matematica:"➗ Matemática", informatica:"💻 Informática", logica:"🧠 Raciocínio Lógico", ingles:"🇺🇸 Inglês", espanhol:"🇪🇸 Espanhol", ciencias:"🔬 Ciências", geografia:"🌎 Geografia", historia:"🏛️ História Brasil/MA"}[item.subject] || "📚 Português")} • ${item.correct} acertos • Nível ${item.level} • ${item.date}
+                            ${subjectLabels[item.subject] || "Português"} • ${item.correct} acertos • Nível ${item.level} • ${item.date}
                         </span>
                     </div>
                     <div class="ranking-score">${item.score} pts</div>
                 </div>
             `).join("");
-        }
+    }
 
+    async function openRanking() {
+        const list = document.getElementById("rankingList");
         document.getElementById("rankingModal").style.display = "flex";
+        list.innerHTML = `<div class="ranking-empty">🌐 Carregando ranking online...</div>`;
+
+        try {
+            const response = await fetch(`${RANKING_API_URL}/api/ranking`, { cache: "no-store" });
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const ranking = await response.json();
+
+            if (!ranking.length) {
+                list.innerHTML = `<div class="ranking-empty">Ainda não há pontuações no ranking online.</div>`;
+                return;
+            }
+
+            list.innerHTML = ranking.map((item, index) => `
+                <div class="ranking-item">
+                    <div class="ranking-position">${index + 1}º</div>
+                    <div>
+                        <div class="ranking-name">${escapeHtml(item.nome)}</div>
+                        <span class="ranking-date">
+                            ${item.acertos} acertos • Nível ${item.nivel}
+                        </span>
+                    </div>
+                    <div class="ranking-score">${item.pontos} pts</div>
+                </div>
+            `).join("");
+        } catch (error) {
+            console.warn("Falha ao carregar ranking online.", error);
+            renderLocalRanking(list);
+        }
     }
 
     function closeRanking() {
