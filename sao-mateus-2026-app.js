@@ -23,7 +23,7 @@ const saoMateusCargos = [
 const el=id=>document.getElementById(id);
 const shuffle=items=>{const a=[...items];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
 const clearTags=s=>String(s??"").replace(/<[^>]+>/g,"").replaceAll("&nbsp;"," ").replaceAll("&amp;","&").replaceAll("&lt;","<").replaceAll("&gt;",">").trim();
-const canonical=s=>clearTags(s).toLocaleLowerCase("pt-BR").replace(/^em uma prova,\s*/,"").replace(/\s+/g," ").replace(/[?!.]+$/,"").trim();
+const canonical=s=>clearTags(s).toLocaleLowerCase("pt-BR").replace(/^em uma prova,\s*/,"").replace(/\s*\(item\s+\d+\)/gi,"").replace(/\s+/g," ").replace(/[?!.]+$/,"").trim();
 function normalize(raw,area){
  const opts=raw&&raw.options;if(!raw||!raw.question||!Array.isArray(opts)||opts.length!==4)return null;
  const correct=Number(raw.correct),options=opts.map(v=>clearTags(v));
@@ -37,10 +37,10 @@ function unique(items){
  return [...map.values()];
 }
 const geral={
- portugues:unique(saoMateusGeneral.portugues.map(q=>normalize(q,"Português"))),
- matematica:unique(saoMateusGeneral.matematica.map(q=>normalize(q,"Matemática e Raciocínio Lógico"))),
- informatica:unique(saoMateusGeneral.informatica.map(q=>normalize(q,"Noções de Informática"))),
- direito:unique(saoMateusGeneral.direito.map(q=>normalize(q,"Direito Administrativo e Constitucional"))),
+ portugues:unique([...saoMateusGeneral.portugues,...saoMateusExpandirGerais("portugues")].map(q=>normalize(q,"Português"))),
+ matematica:unique([...saoMateusGeneral.matematica,...saoMateusExpandirGerais("matematica")].map(q=>normalize(q,"Matemática e Raciocínio Lógico"))),
+ informatica:unique([...saoMateusGeneral.informatica,...saoMateusExpandirGerais("informatica")].map(q=>normalize(q,"Noções de Informática"))),
+ direito:unique([...saoMateusGeneral.direito,...saoMateusExpandirGerais("direito")].map(q=>normalize(q,"Direito Administrativo e Constitucional"))),
  etica:unique(saoMateusGeneral.etica.map(q=>normalize(q,"Ética e Administração"))),
  ambiente:unique(saoMateusGeneral.ambiente.map(q=>normalize(q,"Meio Ambiente")))
 };
@@ -56,8 +56,6 @@ function selectedCargo(){return saoMateusCargos.find(c=>c.id===cargoSelect.value
 function specificFor(c){
  let bank=poolsEspecificas[c.area]||[];
  if(c.area==="enfermagem")bank=bank.concat(poolsEspecificas.sus);
- if(c.area==="administrativo"||c.area==="recepcao")bank=bank.concat(geral.etica);
- if(c.area==="ambiental")bank=bank.concat(geral.ambiente);
  return unique(bank);
 }
 function availablePools(c){
@@ -103,11 +101,11 @@ function takeQuestions(pool,n,scope){
 }
 function makeExam(c){
  const specs=specificFor(c);
- const a=takeQuestions(geral.portugues,10,c.id+"_pt");
+ const a=takeQuestions(geral.portugues,10,c.id+"_pt").map(q=>({...q,trackingScope:c.id+"_pt"}));
  const b=c.nivel==="fundamental"
-  ? takeQuestions(geral.matematica,10,c.id+"_mat")
-  : [...takeQuestions(geral.informatica,5,c.id+"_inf"),...takeQuestions(geral.direito,5,c.id+"_dir")];
- const d=takeQuestions(specs,20,c.id+"_spec");
+  ? takeQuestions(geral.matematica,10,c.id+"_mat").map(q=>({...q,trackingScope:c.id+"_mat"}))
+  : [...takeQuestions(geral.informatica,5,c.id+"_inf").map(q=>({...q,trackingScope:c.id+"_inf"})),...takeQuestions(geral.direito,5,c.id+"_dir").map(q=>({...q,trackingScope:c.id+"_dir"}))];
+ const d=takeQuestions(specs,20,c.id+"_spec").map(q=>({...q,trackingScope:c.id+"_spec"}));
  if(a.length<10||b.length<10||d.length<20)throw new Error("Banco insuficiente para esse cargo.");
  return [...shuffle(a).map(q=>({...q,group:"gerais"})),...shuffle(b).map(q=>({...q,group:"gerais"})),...shuffle(d).map(q=>({...q,group:"especificos"}))];
 }
@@ -116,7 +114,7 @@ function makePractice(c){
  let chosen=pools[key]||pools.tudo;
  if(mode==="erros"){const errors=new Set(readArray(errorKey));chosen=chosen.filter(q=>errors.has(idOf(q)));}
  const size=Number(el("quantidade").value)||40;
- return takeQuestions(chosen,Math.min(size,chosen.length),c.id+"_"+key).map(q=>({...q,group:key==="especificos"?"especificos":"gerais"}));
+ return takeQuestions(chosen,Math.min(size,chosen.length),c.id+"_"+key).map(q=>({...q,trackingScope:c.id+"_"+key,group:key==="especificos"?"especificos":"gerais"}));
 }
 function begin(){
  const cargo=selectedCargo();let qs;
@@ -156,7 +154,7 @@ function answer(option,btn){
  if(!session||session.finished||session.answers[session.index])return;
  const q=session.questions[session.index];
  session.answers[session.index]={q,choice:option.text,correct:option.isCorrect,group:q.group};
- const seenKey=seenPrefix+session.cargo.id+"_"+(q.group==="especificos"?"spec":q.area.replaceAll(" ","_"));
+ const seenKey=seenPrefix+(q.trackingScope||session.cargo.id+"_"+q.area.replaceAll(" ","_"));
  const seen=new Set(readArray(seenKey));seen.add(idOf(q));storeArray(seenKey,[...seen]);
  const errors=new Set(readArray(errorKey));if(option.isCorrect)errors.delete(idOf(q));else errors.add(idOf(q));storeArray(errorKey,[...errors]);
  el("answers").querySelectorAll("button").forEach(b=>{b.disabled=true;if(session.mode!=="simulado"&&b.textContent.slice(1)===q.options[q.correct])b.classList.add("correct");});
