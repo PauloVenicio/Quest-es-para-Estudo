@@ -165,7 +165,9 @@ function saoMateusPortuguesNovas(){
  ["qualificação","qualificaçao","qualificassão","qualificaçâo"],["organização","organisação","organizassão","organizaçao"]
  ];
  for(const [correta,...incorretas] of ortografia){
-  add("Assinale a alternativa que apresenta a grafia correta na norma-padrão do português (termo: "+correta.length+" letras na escrita usual).",
+  const contexto={"privilégio":"benefício ou vantagem atribuída a alguém","análise":"exame crítico ou detalhado de informações","intercessão":"ato de interceder em favor de alguém","referência":"menção que serve de fonte ou orientação"};
+  const pergunta=contexto[correta]?"Qual grafia corresponde ao substantivo que significa "+contexto[correta]+"?":"Qual alternativa contém a grafia correta de uma palavra da língua portuguesa, de acordo com a norma-padrão?";
+  add(pergunta,
     [correta,...incorretas],0,
     "A grafia reconhecida na norma-padrão é \""+correta+"\".", "Ortografia: "+correta);
  }
