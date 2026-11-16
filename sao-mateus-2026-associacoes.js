@@ -6,7 +6,22 @@ function saoMateusConceituaisNovas(chave,itens){
  const out=[];
  const total=itens.length;
  if(total<7)return out;
- const area=chave.replaceAll("_"," ");
+ const nomes={
+  portugues:"Língua Portuguesa",informatica:"Informática",direito:"Direito Administrativo e Constitucional",
+  administrativo:"Administração Pública",recepcao:"Recepção e Atendimento",escola:"Secretaria Escolar",
+  enfermagem:"Enfermagem",vigia:"Vigilância Patrimonial",motorista:"Condução de Veículos",
+  aosd:"Serviços Operacionais",vigilancia:"Vigilância Sanitária",ambiental:"Meio Ambiente",
+  tributos:"Tributação Municipal",social:"Assistência Social",seguranca_trabalho:"Segurança do Trabalho",
+  turma:"Apoio Escolar",eletricista:"Eletricidade",saude_bucal:"Saúde Bucal",radiologia:"Radiologia",
+  sus:"Sistema Único de Saúde",assistente_social:"Serviço Social",biologo:"Biologia",
+  biomedico:"Biomedicina",bioquimico:"Bioquímica",dentista:"Odontologia",enfermeiro:"Enfermagem",
+  farmaceutico:"Farmácia",fisioterapeuta:"Fisioterapia",fonoaudiologo:"Fonoaudiologia",
+  medico:"Medicina",nutricionista:"Nutrição",psicologo:"Psicologia",radiologista:"Diagnóstico por Imagem",
+  terapeuta_ocupacional:"Terapia Ocupacional",auditor_fiscal:"Auditoria Fiscal",contador:"Contabilidade",
+  engenheiro_ambiental:"Engenharia Ambiental",engenheiro_civil:"Engenharia Civil",
+  engenheiro_eletrico:"Engenharia Elétrica",topografo:"Topografia"
+ };
+ const area=nomes[chave]||chave.replaceAll("_"," ");
  const conceito=i=>itens[(i+total*10)%total];
  const par=(i,j)=>conceito(i)[0]+" — "+conceito(j)[1];
  // Variar combinações de conceitos em associações de dois enunciados.
