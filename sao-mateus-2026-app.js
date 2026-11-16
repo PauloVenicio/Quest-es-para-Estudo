@@ -99,7 +99,7 @@ try{
   for(let i=0;i<(localStorage.length||0);i++){
    const key=localStorage.key(i);
    if(typeof key!=="string"||!key.startsWith(seenPrefix))continue;
-   for(const fullId of readArray(key))if(typeof fullId==="string")globalSeen.add(hashedQuestionId(fullId));
+   for(const fullId of readArray(key))if(typeof fullId==="string")globalSeen.add(fullId.includes("|")?hashedQuestionId(fullId):fullId);
   }
   storeArray(globalSeenKey,[...globalSeen]);
   localStorage.setItem(migrationKey,"1");
@@ -163,7 +163,7 @@ function updateSubjects(){
 function updateAvailability(){
  const c=selectedCargo(),pools=availablePools(c),key=subjectSelect.value||"tudo";
  const err=new Set(readArray(errorKey));
- const total=mode==="erros"?pools[key].filter(q=>err.has(idOf(q))).length:pools[key].length;
+ const total=mode==="erros"?pools[key].filter(q=>err.has(idOf(q))||err.has(shortId(q))).length:pools[key].length;
  const ineditas=mode==="erros"?0:pools[key].reduce((sum,q)=>sum+(!globalSeen.has(shortId(q))?1:0),0);
  countNote.textContent=mode==="simulado"?"40 questões • 2,5 pontos por acerto • até 3 horas • sem repetição enquanto houver inéditas":total.toLocaleString("pt-BR")+" questões neste filtro • "+ineditas.toLocaleString("pt-BR")+" ainda não exibidas neste aparelho";
  el("startBtn").disabled=mode==="erros"&&total===0;
@@ -174,7 +174,7 @@ function takeQuestions(pool,n,scope){
  // Primeiro consome todas as perguntas genuinamente inéditas, inclusive entre cargos.
  const oldScope=new Set(readArray(seenPrefix+scope)),fresh=[],review=[];
  for(const q of shuffle(unique(pool))){
-  if(globalSeen.has(shortId(q))||oldScope.has(idOf(q)))review.push(q);
+  if(globalSeen.has(shortId(q))||oldScope.has(shortId(q))||oldScope.has(idOf(q)))review.push(q);
   else fresh.push(q);
  }
  // Se o banco acabar, as menos recentes vêm primeiro.
@@ -228,7 +228,7 @@ function makeExam(c){
 function makePractice(c){
  const pools=availablePools(c),key=subjectSelect.value;
  let chosen=pools[key]||pools.tudo;
- if(mode==="erros"){const errors=new Set(readArray(errorKey));chosen=chosen.filter(q=>errors.has(idOf(q)));}
+ if(mode==="erros"){const errors=new Set(readArray(errorKey));chosen=chosen.filter(q=>errors.has(shortId(q))||errors.has(idOf(q)));}
  const size=Number(el("quantidade").value)||40;
  return takeQuestions(chosen,Math.min(size,chosen.length),c.id+"_"+key).map(q=>({...q,trackingScope:c.id+"_"+key,group:key==="especificos"?"especificos":"gerais"}));
 }
@@ -272,8 +272,11 @@ function answer(option,btn){
  const q=session.questions[session.index];
  session.answers[session.index]={q,choice:option.text,correct:option.isCorrect,group:q.group};
  const seenKey=seenPrefix+(q.trackingScope||session.cargo.id+"_"+q.area.replaceAll(" ","_"));
- const seen=new Set(readArray(seenKey));seen.add(idOf(q));storeArray(seenKey,[...seen]);
- const errors=new Set(readArray(errorKey));if(option.isCorrect)errors.delete(idOf(q));else errors.add(idOf(q));storeArray(errorKey,[...errors]);
+ const seen=new Set(readArray(seenKey));seen.add(shortId(q));storeArray(seenKey,[...seen]);
+ const errors=new Set(readArray(errorKey));
+ if(option.isCorrect){errors.delete(idOf(q));errors.delete(shortId(q));}
+ else{errors.add(shortId(q));errors.delete(idOf(q));}
+ storeArray(errorKey,[...errors]);
  el("answers").querySelectorAll("button").forEach(b=>{b.disabled=true;if(session.mode!=="simulado"&&b.textContent.slice(1)===q.options[q.correct])b.classList.add("correct");});
  if(session.mode==="simulado"){btn.style.borderColor="#aaa0ff";}else{
  btn.classList.add(option.isCorrect?"correct":"wrong");
