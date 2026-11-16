@@ -149,7 +149,6 @@ function specificFor(c){
  const extra=relacionados[c.area];
  if(extra)bank=bank.concat(poolsEspecificas[extra]||geral[extra]||[]);
  if(c.area==="enfermagem")bank=bank.concat(poolsEspecificas.sus);
- if(c.edital==="003")bank=bank.concat(poolsEspecificas.didatica||[]);
  if(["administrativo","recepcao","vigia","aosd","social","guarda_municipal"].includes(c.area))bank=bank.concat(geral.etica);
  if(["ambiental","vigilancia","motorista","transito"].includes(c.area))bank=bank.concat(geral.ambiente);
  return unique(bank);
