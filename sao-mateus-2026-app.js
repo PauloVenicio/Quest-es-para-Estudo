@@ -81,16 +81,31 @@ let mode="simulado",session=null,ticker=null;
 function readArray(key){try{const v=JSON.parse(localStorage.getItem(key)||"[]");return Array.isArray(v)?v:[];}catch{return[];}}
 function storeArray(key,arr){try{localStorage.setItem(key,JSON.stringify(arr));}catch{}}
 // IDs curtos e persistentes evitam registros extensos no armazenamento móvel.
-function shortId(q){
- const src=idOf(q);
- if(q._shortId)return q._shortId;
+function hashedQuestionId(src){
  let hash=2166136261;
  for(let i=0;i<src.length;i++){hash^=src.charCodeAt(i);hash=Math.imul(hash,16777619);}
- q._shortId=(hash>>>0).toString(36)+"_"+src.length.toString(36);
+ return (hash>>>0).toString(36)+"_"+src.length.toString(36);
+}
+function shortId(q){
+ if(!q._shortId)q._shortId=hashedQuestionId(idOf(q));
  return q._shortId;
 }
 const globalSeen=new Set(readArray(globalSeenKey)),recentSeen=readArray(recentKey).slice(-600);
 const recentSet=new Set(recentSeen);
+// Preserva o histórico de questões já resolvidas na versão anterior do site.
+try{
+ const migrationKey="saomateus26_historico_migrado_v2";
+ if(!localStorage.getItem(migrationKey)){
+  for(let i=0;i<(localStorage.length||0);i++){
+   const key=localStorage.key(i);
+   if(typeof key!=="string"||!key.startsWith(seenPrefix))continue;
+   for(const fullId of readArray(key))if(typeof fullId==="string")globalSeen.add(hashedQuestionId(fullId));
+  }
+  storeArray(globalSeenKey,[...globalSeen]);
+  localStorage.setItem(migrationKey,"1");
+ }
+}catch(error){console.warn("Histórico anterior não migrado:",error);}
+
 function markPresented(q){
  const id=shortId(q);
  globalSeen.add(id);
