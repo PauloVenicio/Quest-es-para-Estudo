@@ -24,7 +24,7 @@ function saoMateusConceituaisNovas(chave,itens){
     ta+" — "+dd+"; "+tb+" — "+dc
    ];
    out.push({
-    question:"Sobre "+area+", qual alternativa associa CORRETAMENTE os dois termos às suas definições? (Conjunto "+(i+1)+"-"+delta+")",
+    question:"Na área de "+area+", considere os conceitos "+ta+", "+tb+", "+tc+" e "+td+". Qual alternativa associa CORRETAMENTE dois termos às suas definições?",
     options:alternativas,correct:0,
     explanation:"As correspondências corretas são: "+verdadeiro+".",
     topic:"Associação: "+ta+" e "+tb
@@ -54,7 +54,7 @@ function saoMateusConceituaisNovas(chave,itens){
   const [ta,da]=conceito(ids[0]),[tb,db]=conceito(ids[1]);
   const [tc,dc]=conceito(ids[2]),[td,dd]=conceito(ids[3]);
   out.push({
-   question:"No estudo de "+area+", qual das associações abaixo está INCORRETA?",
+   question:"Na área de "+area+", analise quatro associações envolvendo "+ta+", "+tb+", "+tc+" e "+td+". Qual está INCORRETA?",
    options:[ta+" — "+db,tb+" — "+db,tc+" — "+dc,td+" — "+dd],
    correct:0,explanation:ta+" corresponde a "+da+"; não a "+db+". As outras relações estão corretas.",
    topic:"Comparações: "+ta+" / "+tb+" / "+tc+" / "+td
