@@ -56,6 +56,8 @@ function selectedCargo(){return saoMateusCargos.find(c=>c.id===cargoSelect.value
 function specificFor(c){
  let bank=poolsEspecificas[c.area]||[];
  if(c.area==="enfermagem")bank=bank.concat(poolsEspecificas.sus);
+ if(["administrativo","recepcao","vigia","aosd","social"].includes(c.area))bank=bank.concat(geral.etica);
+ if(["ambiental","vigilancia","motorista"].includes(c.area))bank=bank.concat(geral.ambiente);
  return unique(bank);
 }
 function availablePools(c){
