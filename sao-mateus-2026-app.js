@@ -4,20 +4,40 @@ const saoMateusCargos = [
  {id:"1",nome:"Agente Administrativo",nivel:"medio",area:"administrativo"},
  {id:"2",nome:"Agente de Vigilância Sanitária",nivel:"medio",area:"vigilancia"},
  {id:"3",nome:"AOSD (Auxiliar Operacional de Serviços Diversos)",nivel:"fundamental",area:"aosd"},
+ {id:"4",nome:"Assistente Social",nivel:"superior",area:"assistente_social",saude:true},
  {id:"5",nome:"Auxiliar de Saúde Bucal",nivel:"medio",area:"saude_bucal"},
+ {id:"6",nome:"Auditor Fiscal",nivel:"superior",area:"auditor_fiscal"},
  {id:"7",nome:"Auxiliar de Turma",nivel:"medio",area:"turma"},
+ {id:"8",nome:"Biólogo",nivel:"superior",area:"biologo",saude:true},
+ {id:"9",nome:"Biomédico",nivel:"superior",area:"biomedico",saude:true},
+ {id:"10",nome:"Bioquímico",nivel:"superior",area:"bioquimico",saude:true},
+ {id:"11",nome:"Contador",nivel:"superior",area:"contador"},
+ {id:"12",nome:"Dentista",nivel:"superior",area:"dentista",saude:true},
  {id:"13",nome:"Eletricista",nivel:"fundamental",area:"eletricista"},
+ {id:"14",nome:"Enfermeiro",nivel:"superior",area:"enfermeiro",saude:true},
+ {id:"15",nome:"Engenheiro Ambiental",nivel:"superior",area:"engenheiro_ambiental"},
+ {id:"16",nome:"Engenheiro Civil",nivel:"superior",area:"engenheiro_civil"},
+ {id:"17",nome:"Engenheiro Elétrico",nivel:"superior",area:"engenheiro_eletrico"},
+ {id:"18",nome:"Farmacêutico",nivel:"superior",area:"farmaceutico",saude:true},
  {id:"19",nome:"Fiscal Ambiental",nivel:"medio",area:"ambiental"},
  {id:"20",nome:"Fiscal de Tributos",nivel:"medio",area:"tributos"},
+ {id:"21",nome:"Fisioterapeuta",nivel:"superior",area:"fisioterapeuta",saude:true},
+ {id:"22",nome:"Fonoaudiólogo",nivel:"superior",area:"fonoaudiologo",saude:true},
+ {id:"23",nome:"Médico - Clínico Geral",nivel:"superior",area:"medico",saude:true},
  {id:"24",nome:"Motorista B",nivel:"fundamental",area:"motorista"},
  {id:"25",nome:"Motorista D",nivel:"fundamental",area:"motorista"},
+ {id:"26",nome:"Nutricionista",nivel:"superior",area:"nutricionista",saude:true},
  {id:"27",nome:"Orientador Social",nivel:"medio",area:"social"},
+ {id:"28",nome:"Psicólogo",nivel:"superior",area:"psicologo",saude:true},
+ {id:"29",nome:"Radiologista",nivel:"superior",area:"radiologista",saude:true},
  {id:"30",nome:"Recepcionista",nivel:"medio",area:"recepcao"},
  {id:"31",nome:"Secretário de Escola",nivel:"medio",area:"escola"},
  {id:"32",nome:"Técnico de Enfermagem",nivel:"medio",area:"enfermagem"},
  {id:"33",nome:"Técnico em Radiologia",nivel:"medio",area:"radiologia"},
  {id:"34",nome:"Técnico em Segurança do Trabalho",nivel:"medio",area:"seguranca_trabalho"},
  {id:"35",nome:"Técnico de Saúde Bucal",nivel:"medio",area:"saude_bucal"},
+ {id:"36",nome:"Terapeuta Ocupacional",nivel:"superior",area:"terapeuta_ocupacional",saude:true},
+ {id:"37",nome:"Topógrafo",nivel:"medio",area:"topografo"},
  {id:"38",nome:"Vigia",nivel:"fundamental",area:"vigia"}
 ];
 const el=id=>document.getElementById(id);
@@ -55,21 +75,30 @@ function idOf(q){return canonical(q.question)+"|"+canonical(q.options[q.correct]
 function selectedCargo(){return saoMateusCargos.find(c=>c.id===cargoSelect.value)||saoMateusCargos[0];}
 function specificFor(c){
  let bank=poolsEspecificas[c.area]||[];
+ // Complementos próximos ao conteúdo previsto, sem substituir o núcleo específico do cargo.
+ const relacionados={
+  assistente_social:"social", auditor_fiscal:"tributos",
+  dentista:"saude_bucal",enfermeiro:"enfermagem",
+  engenheiro_ambiental:"ambiental", radiologista:"radiologia"
+ };
+ const extra=relacionados[c.area];
+ if(extra)bank=bank.concat(poolsEspecificas[extra]||[]);
  if(c.area==="enfermagem")bank=bank.concat(poolsEspecificas.sus);
  if(["administrativo","recepcao","vigia","aosd","social"].includes(c.area))bank=bank.concat(geral.etica);
  if(["ambiental","vigilancia","motorista"].includes(c.area))bank=bank.concat(geral.ambiente);
  return unique(bank);
 }
 function availablePools(c){
- const specific=specificFor(c), commons=unique([...geral.informatica,...geral.direito]);
+ const specific=specificFor(c);
+ const sus=c.saude?(poolsEspecificas.sus||[]):[];
  return {
-  tudo:unique([...geral.portugues,...geral.matematica,...geral.informatica,...geral.direito,...specific]),
-  portugues:geral.portugues, matematica:geral.matematica,
+  tudo:unique([...geral.portugues,...geral.matematica,...geral.informatica,...geral.direito,...specific,...sus]),
+  portugues:geral.portugues,matematica:geral.matematica,
   informatica:geral.informatica,direito:geral.direito,
-  especificos:specific
+  sus,especificos:unique([...specific,...sus])
  };
 }
-const labels={tudo:"Todas as disciplinas",portugues:"Língua Portuguesa",matematica:"Matemática e Raciocínio Lógico",informatica:"Noções de Informática",direito:"Direito Administrativo e Constitucional",especificos:"Conhecimentos Específicos"};
+const labels={tudo:"Todas as disciplinas",portugues:"Língua Portuguesa",matematica:"Matemática e Raciocínio Lógico",informatica:"Noções de Informática",direito:"Direito Administrativo e Constitucional",sus:"Legislação do SUS",especificos:"Conhecimentos Específicos"};
 function setMode(next){
  mode=next;
  document.querySelectorAll(".mode").forEach(btn=>btn.setAttribute("aria-pressed",String(btn.dataset.mode===mode)));
@@ -78,7 +107,12 @@ function setMode(next){
  updateAvailability();
 }
 function updateSubjects(){
- const c=selectedCargo(),keep=subjectSelect.value,entries=c.nivel==="fundamental"?["tudo","portugues","matematica","especificos"]:["tudo","portugues","informatica","direito","especificos"];
+ const c=selectedCargo(),keep=subjectSelect.value;
+ const entries=c.nivel==="fundamental"?
+  ["tudo","portugues","matematica","especificos"]:
+  c.nivel==="superior"?
+  ["tudo","portugues","matematica","informatica","direito",...(c.saude?["sus"]:[]),"especificos"]:
+  ["tudo","portugues","informatica","direito","especificos"];
  subjectSelect.replaceChildren();
  for(const k of entries){const opt=document.createElement("option");opt.value=k;opt.textContent=labels[k];subjectSelect.append(opt);}
  subjectSelect.value=entries.includes(keep)?keep:"tudo";
@@ -104,11 +138,28 @@ function takeQuestions(pool,n,scope){
 function makeExam(c){
  const specs=specificFor(c);
  const a=takeQuestions(geral.portugues,10,c.id+"_pt").map(q=>({...q,trackingScope:c.id+"_pt"}));
- const b=c.nivel==="fundamental"
-  ? takeQuestions(geral.matematica,10,c.id+"_mat").map(q=>({...q,trackingScope:c.id+"_mat"}))
-  : [...takeQuestions(geral.informatica,5,c.id+"_inf").map(q=>({...q,trackingScope:c.id+"_inf"})),...takeQuestions(geral.direito,5,c.id+"_dir").map(q=>({...q,trackingScope:c.id+"_dir"}))];
- const d=takeQuestions(specs,20,c.id+"_spec").map(q=>({...q,trackingScope:c.id+"_spec"}));
- if(a.length<10||b.length<10||d.length<20)throw new Error("Banco insuficiente para esse cargo.");
+ let b;
+ if(c.nivel==="fundamental"){
+  b=takeQuestions(geral.matematica,10,c.id+"_mat").map(q=>({...q,trackingScope:c.id+"_mat"}));
+ }else if(c.nivel==="superior"){
+  // O edital agrupa estas disciplinas em um bloco de 10 sem definir suas quantidades individuais.
+  b=[
+   ...takeQuestions(geral.matematica,4,c.id+"_mat").map(q=>({...q,trackingScope:c.id+"_mat"})),
+   ...takeQuestions(geral.informatica,3,c.id+"_inf").map(q=>({...q,trackingScope:c.id+"_inf"})),
+   ...takeQuestions(geral.direito,3,c.id+"_dir").map(q=>({...q,trackingScope:c.id+"_dir"}))
+  ];
+ }else{
+  b=[
+   ...takeQuestions(geral.informatica,5,c.id+"_inf").map(q=>({...q,trackingScope:c.id+"_inf"})),
+   ...takeQuestions(geral.direito,5,c.id+"_dir").map(q=>({...q,trackingScope:c.id+"_dir"}))
+  ];
+ }
+ const specificCount=c.saude?15:20;
+ const d=takeQuestions(specs,specificCount,c.id+"_spec").map(q=>({...q,trackingScope:c.id+"_spec"}));
+ if(c.saude){
+  d.push(...takeQuestions(poolsEspecificas.sus||[],5,c.id+"_sus").map(q=>({...q,trackingScope:c.id+"_sus"})));
+ }
+ if(a.length!==10||b.length!==10||d.length!==20)throw new Error("Banco insuficiente para esse cargo.");
  return [...shuffle(a).map(q=>({...q,group:"gerais"})),...shuffle(b).map(q=>({...q,group:"gerais"})),...shuffle(d).map(q=>({...q,group:"especificos"}))];
 }
 function makePractice(c){
@@ -208,11 +259,18 @@ function reset(){
  session=null;el("resultPanel").style.display="none";el("quizPanel").style.display="none";el("welcome").classList.remove("hidden");el("setupPanel").style.display="block";updateAvailability();window.scrollTo({top:0,behavior:"smooth"});
 }
 function init(){
- for(const c of saoMateusCargos){const opt=document.createElement("option");opt.value=c.id;opt.textContent=c.nome+" • "+(c.nivel==="fundamental"?"Fundamental":"Médio/Técnico");cargoSelect.append(opt);}
+ for(const [nivel,titulo] of [["fundamental","Nível fundamental"],["medio","Nível médio / técnico"],["superior","Nível superior"]]){
+  const grupo=document.createElement("optgroup");grupo.label=titulo;
+  for(const c of saoMateusCargos.filter(item=>item.nivel===nivel)){
+   const opt=document.createElement("option");opt.value=c.id;opt.textContent=String(c.id).padStart(2,"0")+" • "+c.nome;grupo.append(opt);
+  }
+  cargoSelect.append(grupo);
+ }
  el("cargoCount").textContent=saoMateusCargos.length;
  const all=unique([...Object.values(geral).flat(),...Object.values(poolsEspecificas).flat()]);
  el("totalCount").textContent=all.length.toLocaleString("pt-BR")+"+";
- const saved=localStorage.getItem("saomateus26_cargo");if(saved&&saoMateusCargos.some(x=>x.id===saved))cargoSelect.value=saved;
+ const saved=localStorage.getItem("saomateus26_cargo");
+ cargoSelect.value=saved&&saoMateusCargos.some(x=>x.id===saved)?saved:"1";
  cargoSelect.addEventListener("change",()=>{localStorage.setItem("saomateus26_cargo",cargoSelect.value);updateSubjects();});
  subjectSelect.addEventListener("change",updateAvailability);
  document.querySelectorAll(".mode").forEach(btn=>btn.addEventListener("click",()=>setMode(btn.dataset.mode)));
