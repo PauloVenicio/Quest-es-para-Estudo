@@ -38,7 +38,26 @@ const saoMateusCargos = [
  {id:"35",nome:"Técnico de Saúde Bucal",nivel:"medio",area:"saude_bucal"},
  {id:"36",nome:"Terapeuta Ocupacional",nivel:"superior",area:"terapeuta_ocupacional",saude:true},
  {id:"37",nome:"Topógrafo",nivel:"medio",area:"topografo"},
- {id:"38",nome:"Vigia",nivel:"fundamental",area:"vigia"}
+ {id:"38",nome:"Vigia",nivel:"fundamental",area:"vigia"},
+ {id:"002-001",nome:"Agente de Trânsito",nivel:"medio",area:"transito",edital:"002"},
+ {id:"002-002",nome:"Guarda Municipal",nivel:"medio",area:"guarda_municipal",edital:"002"},
+ {id:"003-001",nome:"Pedagogo",nivel:"superior",area:"pedagogo",edital:"003"},
+ {id:"003-002",nome:"Professor - 1º ao 5º Ano",nivel:"superior",area:"professor_anos_iniciais",edital:"003"},
+ {id:"003-003",nome:"Professor de Braille",nivel:"superior",area:"professor_braille",edital:"003"},
+ {id:"003-004",nome:"Professor de AEE",nivel:"superior",area:"professor_aee",edital:"003"},
+ {id:"003-005",nome:"Professor de Arte",nivel:"superior",area:"professor_arte",edital:"003"},
+ {id:"003-006",nome:"Professor de Ciências",nivel:"superior",area:"professor_ciencias",edital:"003"},
+ {id:"003-007",nome:"Professor de Cultura Digital",nivel:"superior",area:"professor_cultura_digital",edital:"003"},
+ {id:"003-008",nome:"Professor de Educação Física",nivel:"superior",area:"professor_edfisica",edital:"003"},
+ {id:"003-009",nome:"Professor de Educação Infantil",nivel:"superior",area:"professor_infantil",edital:"003"},
+ {id:"003-010",nome:"Professor de Geografia",nivel:"superior",area:"professor_geografia",edital:"003"},
+ {id:"003-011",nome:"Professor de História",nivel:"superior",area:"professor_historia",edital:"003"},
+ {id:"003-012",nome:"Professor de Língua Inglesa",nivel:"superior",area:"professor_ingles",edital:"003"},
+ {id:"003-013",nome:"Professor de Língua Portuguesa",nivel:"superior",area:"professor_portugues",edital:"003"},
+ {id:"003-014",nome:"Professor de Matemática",nivel:"superior",area:"professor_matematica",edital:"003"},
+ {id:"003-015",nome:"Professor de Educação Quilombola",nivel:"superior",area:"professor_quilombola",edital:"003"},
+ {id:"003-016",nome:"Professor EJAI - 1º ao 5º Ano",nivel:"superior",area:"professor_ejai",edital:"003"},
+ {id:"003-017",nome:"Professor Intérprete de Libras",nivel:"superior",area:"professor_libras",edital:"003"}
 ];
 const el=id=>document.getElementById(id);
 const shuffle=items=>{const a=[...items];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
@@ -121,26 +140,33 @@ function specificFor(c){
  const relacionados={
   assistente_social:"social", auditor_fiscal:"tributos",
   dentista:"saude_bucal",enfermeiro:"enfermagem",
-  engenheiro_ambiental:"ambiental", radiologista:"radiologia"
+  engenheiro_ambiental:"ambiental", radiologista:"radiologia",
+  transito:"motorista",guarda_municipal:"vigia",
+  professor_anos_iniciais:"turma",professor_infantil:"turma",
+  professor_ciencias:"biologo",professor_cultura_digital:"informatica",
+  professor_matematica:"matematica",professor_portugues:"portugues"
  };
  const extra=relacionados[c.area];
- if(extra)bank=bank.concat(poolsEspecificas[extra]||[]);
+ if(extra)bank=bank.concat(poolsEspecificas[extra]||geral[extra]||[]);
  if(c.area==="enfermagem")bank=bank.concat(poolsEspecificas.sus);
- if(["administrativo","recepcao","vigia","aosd","social"].includes(c.area))bank=bank.concat(geral.etica);
- if(["ambiental","vigilancia","motorista"].includes(c.area))bank=bank.concat(geral.ambiente);
+ if(c.edital==="003")bank=bank.concat(poolsEspecificas.didatica||[]);
+ if(["administrativo","recepcao","vigia","aosd","social","guarda_municipal"].includes(c.area))bank=bank.concat(geral.etica);
+ if(["ambiental","vigilancia","motorista","transito"].includes(c.area))bank=bank.concat(geral.ambiente);
  return unique(bank);
 }
 function availablePools(c){
  const specific=specificFor(c);
  const sus=c.saude?(poolsEspecificas.sus||[]):[];
+ const didatica=c.edital==="003"?(poolsEspecificas.didatica||[]):[];
+ const other=c.edital==="003"?[]:geral.matematica;
  return {
-  tudo:unique([...geral.portugues,...geral.matematica,...geral.informatica,...geral.direito,...specific,...sus]),
+  tudo:unique([...geral.portugues,...other,...geral.informatica,...geral.direito,...specific,...sus,...didatica]),
   portugues:geral.portugues,matematica:geral.matematica,
   informatica:geral.informatica,direito:geral.direito,
-  sus,especificos:unique([...specific,...sus])
+  sus,didatica,especificos:unique([...specific,...sus,...didatica])
  };
 }
-const labels={tudo:"Todas as disciplinas",portugues:"Língua Portuguesa",matematica:"Matemática e Raciocínio Lógico",informatica:"Noções de Informática",direito:"Direito Administrativo e Constitucional",sus:"Legislação do SUS",especificos:"Conhecimentos Específicos"};
+const labels={tudo:"Todas as disciplinas",portugues:"Língua Portuguesa",matematica:"Matemática e Raciocínio Lógico",informatica:"Noções de Informática",direito:"Direito Administrativo e Constitucional",sus:"Legislação do SUS",didatica:"Didática e Legislação Educacional",especificos:"Conhecimentos Específicos"};
 function setMode(next){
  mode=next;
  document.querySelectorAll(".mode").forEach(btn=>btn.setAttribute("aria-pressed",String(btn.dataset.mode===mode)));
@@ -152,6 +178,10 @@ function updateSubjects(){
  const c=selectedCargo(),keep=subjectSelect.value;
  const entries=c.nivel==="fundamental"?
   ["tudo","portugues","matematica","especificos"]:
+  c.edital==="003"?
+  ["tudo","portugues","informatica","direito","didatica","especificos"]:
+  c.edital==="002"?
+  ["tudo","portugues","matematica","informatica","direito","especificos"]:
   c.nivel==="superior"?
   ["tudo","portugues","matematica","informatica","direito",...(c.saude?["sus"]:[]),"especificos"]:
   ["tudo","portugues","informatica","direito","especificos"];
@@ -204,8 +234,21 @@ function makeExam(c){
  let b;
  if(c.nivel==="fundamental"){
   b=takeQuestions(geral.matematica,10,c.id+"_mat").map(q=>({...q,trackingScope:c.id+"_mat"}));
+ }else if(c.edital==="003"){
+  // Edital 003: sem Matemática nos conhecimentos gerais; divisão 5+5 meramente didática.
+  b=[
+   ...takeQuestions(geral.informatica,5,c.id+"_inf").map(q=>({...q,trackingScope:c.id+"_inf"})),
+   ...takeQuestions(geral.direito,5,c.id+"_dir").map(q=>({...q,trackingScope:c.id+"_dir"}))
+  ];
+ }else if(c.edital==="002"){
+  // Edital 002: Informática, Matemática e Direito juntos no bloco de 10.
+  b=[
+   ...takeQuestions(geral.matematica,4,c.id+"_mat").map(q=>({...q,trackingScope:c.id+"_mat"})),
+   ...takeQuestions(geral.informatica,3,c.id+"_inf").map(q=>({...q,trackingScope:c.id+"_inf"})),
+   ...takeQuestions(geral.direito,3,c.id+"_dir").map(q=>({...q,trackingScope:c.id+"_dir"}))
+  ];
  }else if(c.nivel==="superior"){
-  // O edital agrupa estas disciplinas em um bloco de 10 sem definir suas quantidades individuais.
+  // Edital 001: composição didática do bloco complementar.
   b=[
    ...takeQuestions(geral.matematica,4,c.id+"_mat").map(q=>({...q,trackingScope:c.id+"_mat"})),
    ...takeQuestions(geral.informatica,3,c.id+"_inf").map(q=>({...q,trackingScope:c.id+"_inf"})),
@@ -217,10 +260,12 @@ function makeExam(c){
    ...takeQuestions(geral.direito,5,c.id+"_dir").map(q=>({...q,trackingScope:c.id+"_dir"}))
   ];
  }
- const specificCount=c.saude?15:20;
+ const specialBlock=c.edital==="003"?"didatica":c.saude?"sus":null;
+ const specificCount=specialBlock?15:20;
  const d=takeQuestions(specs,specificCount,c.id+"_spec").map(q=>({...q,trackingScope:c.id+"_spec"}));
- if(c.saude){
-  d.push(...takeQuestions(poolsEspecificas.sus||[],5,c.id+"_sus").map(q=>({...q,trackingScope:c.id+"_sus"})));
+ if(specialBlock){
+  const bank=poolsEspecificas[specialBlock]||[];
+  d.push(...takeQuestions(bank,5,c.id+"_"+specialBlock).map(q=>({...q,trackingScope:c.id+"_"+specialBlock})));
  }
  if(a.length!==10||b.length!==10||d.length!==20)throw new Error("Banco insuficiente para esse cargo.");
  return [...shuffle(a).map(q=>({...q,group:"gerais"})),...shuffle(b).map(q=>({...q,group:"gerais"})),...shuffle(d).map(q=>({...q,group:"especificos"}))];
@@ -328,8 +373,8 @@ function reset(){
 function init(){
  for(const [nivel,titulo] of [["fundamental","Nível fundamental"],["medio","Nível médio / técnico"],["superior","Nível superior"]]){
   const grupo=document.createElement("optgroup");grupo.label=titulo;
-  for(const c of saoMateusCargos.filter(item=>item.nivel===nivel)){
-   const opt=document.createElement("option");opt.value=c.id;opt.textContent=String(c.id).padStart(2,"0")+" • "+c.nome;grupo.append(opt);
+  for(const c of saoMateusCargos.filter(item=>item.nivel===nivel).sort((a,b)=>a.nome.localeCompare(b.nome,"pt-BR"))){
+   const opt=document.createElement("option");opt.value=c.id;opt.textContent=c.nome;grupo.append(opt);
   }
   cargoSelect.append(grupo);
  }
