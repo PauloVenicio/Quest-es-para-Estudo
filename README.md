@@ -1,6 +1,6 @@
 # Central do Conhecimento • Concurso São Mateus do Maranhão 2026
 
-Área de estudos adicional criada para o **Edital nº 001/2026 (16/11/2026)** da Prefeitura de São Mateus do Maranhão, com organização da **CONSULPAM**.
+Área de estudos dos **três editais do concurso de São Mateus do Maranhão, de 16/11/2026**, organizados pela **CONSULPAM**: nº 001/2026 (cargos gerais), nº 002/2026 (Agente de Trânsito e Guarda Municipal) e nº 003/2026 (Magistério). Os cargos aparecem juntos na seleção do site, em ordem alfabética por escolaridade.
 
 ## Acessar
 
@@ -11,60 +11,78 @@ O site original e seu ranking continuam no arquivo `index.html`. O novo módulo 
 
 ## O que foi incluído
 
-- Banco de **32.006 questões distintas por enunciado e resposta**, após deduplicação textual: **10.446 de conhecimentos gerais** e **21.560 de conhecimentos específicos**. Inclui exercícios de conceitos combinados e situações-problema numéricas parametrizadas. A contagem não equivale a 32 mil assuntos ou fatos independentes.
-- Seleção dos **38 cargos do edital**, agrupados por nível fundamental (5), médio/técnico (14) e superior (19).
+- Banco de **42.706 questões distintas por enunciado e resposta**, após deduplicação textual: **10.446 de conhecimentos gerais** e **32.260 de conhecimentos específicos**. Inclui exercícios de conceitos combinados e situações-problema numéricas parametrizadas. A contagem não equivale a 32 mil assuntos ou fatos independentes.
+- Seleção integrada dos **57 cargos dos editais 001, 002 e 003**, agrupados por nível fundamental (5), médio/técnico (16) e superior (36), em ordem alfabética.
 - **Simulado com 40 questões**, quatro alternativas e limite de três horas.
 - Distribuição: 10 de Língua Portuguesa; 10 de conhecimentos gerais complementares; 20 de conhecimentos específicos. No nível fundamental, o bloco complementar tem Matemática e Raciocínio Lógico. No médio/técnico, as 10 questões são divididas didaticamente em 5 de Informática e 5 de Direito. No superior, a divisão didática é 4 de Matemática, 3 de Informática e 3 de Direito. O edital **não fixa a divisão individual** dessas matérias nos blocos complementares de médio/técnico e superior.
 - Nos 14 cargos superiores da área de Saúde listados no edital: 15 questões específicas do cargo e 5 de Legislação SUS (composição didática dentro das 20 específicas).
+- **Edital 002/2026** (Agente de Trânsito e Guarda Municipal): 10 questões de Português, 10 gerais complementares divididas didaticamente entre Matemática (4), Informática (3) e Direito (3), e 20 de conhecimentos específicos.
+- **Edital 003/2026** (17 cargos do Magistério): 10 de Português, 10 gerais complementares divididas didaticamente entre Informática (5) e Direito (5), e 20 específicas com **15 da especialidade e 5 de Didática e Legislação Educacional**. O edital não detalha quantidade individual por tópico.
+- **Atenção às demais etapas:** o Edital 002 inclui, além da objetiva, investigação social, exames médicos, avaliação psicológica, teste de aptidão física e curso de formação. O Edital 003 prevê prova de títulos.
 - Nota de 0 a 100; critério de aprovação simulada de 50 pontos e ao menos um acerto em cada área.
 - Treino por disciplina, prioridade para questões ainda não vistas, revisão de erros, correção comentada, tema claro/escuro, layout responsivo e impressão do resultado.
 - **Sistema antirrepetição global no dispositivo:** marca questões exibidas com identificadores compactos; ao gerar novo simulado, seleciona primeiro questões ainda não apresentadas no aparelho, inclusive entre cargos. Só recorre a questões antigas ao esgotar as inéditas da disciplina; entre antigas, evita as mais recentes. O progresso é preservado no armazenamento local do navegador (sem sincronização entre aparelhos ou após limpeza de dados).
 - Histórico local por dispositivo (`localStorage`). Não há sincronização dos resultados deste módulo com o ranking online original.
 
-## Cargos com treinamento específico
+## Todos os cargos disponíveis
 
 1. Agente Administrativo
-2. Agente de Vigilância Sanitária
-3. AOSD (Auxiliar Operacional de Serviços Diversos)
-4. Assistente Social
-5. Auxiliar de Saúde Bucal
+2. Agente de Trânsito
+3. Agente de Vigilância Sanitária
+4. AOSD (Auxiliar Operacional de Serviços Diversos)
+5. Assistente Social
 6. Auditor Fiscal
-7. Auxiliar de Turma
-8. Biólogo
-9. Biomédico
-10. Bioquímico
-11. Contador
-12. Dentista
-13. Eletricista
-14. Enfermeiro
-15. Engenheiro Ambiental
-16. Engenheiro Civil
-17. Engenheiro Elétrico
-18. Farmacêutico
-19. Fiscal Ambiental
-20. Fiscal de Tributos
-21. Fisioterapeuta
-22. Fonoaudiólogo
-23. Médico - Clínico Geral
-24. Motorista B
-25. Motorista D
-26. Nutricionista
-27. Orientador Social
-28. Psicólogo
-29. Radiologista
-30. Recepcionista
-31. Secretário de Escola
-32. Técnico de Enfermagem
-33. Técnico em Radiologia
-34. Técnico em Segurança do Trabalho
-35. Técnico de Saúde Bucal
-36. Terapeuta Ocupacional
-37. Topógrafo
-38. Vigia
-
-O módulo oferece questões autorais para **todos os 38 cargos**, com pelo menos 28 conceitos por área de conhecimento específico. A contagem inclui variações parametrizadas de cálculos e exercícios que relacionam os mesmos conceitos em diferentes combinações. Portanto, **32.006 questões não significam 32.006 conteúdos diferentes**. A inclusão de um cargo não significa que todo o conteúdo extenso do edital esteja esgotado ou revisado por especialistas. Nenhuma questão foi reproduzida como prova oficial da CONSULPAM.
-
-**Validação:** testes automáticos de todos os 38 cargos confirmaram 40 perguntas por simulado, 20 gerais e 20 específicas, quatro alternativas e nenhuma duplicata textual em cada prova. Também foram simuladas 25 provas consecutivas, sem repetição de pergunta, nos cargos de Biólogo, Motorista B, Agente Administrativo e Radiologista. O comportamento real depende do histórico acumulado no aparelho e do tamanho de cada filtro.
+7. Auxiliar de Saúde Bucal
+8. Auxiliar de Turma
+9. Biólogo
+10. Biomédico
+11. Bioquímico
+12. Contador
+13. Dentista
+14. Eletricista
+15. Enfermeiro
+16. Engenheiro Ambiental
+17. Engenheiro Civil
+18. Engenheiro Elétrico
+19. Farmacêutico
+20. Fiscal Ambiental
+21. Fiscal de Tributos
+22. Fisioterapeuta
+23. Fonoaudiólogo
+24. Guarda Municipal
+25. Médico - Clínico Geral
+26. Motorista B
+27. Motorista D
+28. Nutricionista
+29. Orientador Social
+30. Pedagogo
+31. Professor - 1º ao 5º Ano
+32. Professor de AEE
+33. Professor de Arte
+34. Professor de Braille
+35. Professor de Ciências
+36. Professor de Cultura Digital
+37. Professor de Educação Física
+38. Professor de Educação Infantil
+39. Professor de Educação Quilombola
+40. Professor de Geografia
+41. Professor de História
+42. Professor de Língua Inglesa
+43. Professor de Língua Portuguesa
+44. Professor de Matemática
+45. Professor EJAI - 1º ao 5º Ano
+46. Professor Intérprete de Libras
+47. Psicólogo
+48. Radiologista
+49. Recepcionista
+50. Secretário de Escola
+51. Técnico de Enfermagem
+52. Técnico de Saúde Bucal
+53. Técnico em Radiologia
+54. Técnico em Segurança do Trabalho
+55. Terapeuta Ocupacional
+56. Topógrafo
+57. Vigia
 
 ## Arquivos
 
@@ -81,10 +99,18 @@ O módulo oferece questões autorais para **todos os 38 cargos**, com pelo menos
 | `sao-mateus-2026-calculos.js` | Problemas matemáticos autorais parametrizados, com resolução |
 | `sao-mateus-2026-associacoes.js` | Exercícios contextualizados de associação de dois, três e quatro conceitos |
 | `sao-mateus-2026-portugues.js` | Vocabulário, ortografia, tonicidade e análise gramatical |
+| `sao-mateus-2026-edital-002.js` | Banco específico de Agente de Trânsito e Guarda Municipal |
+| `sao-mateus-2026-edital-003-a.js` | Didática, Pedagogia e nove bancos específicos do magistério |
+| `sao-mateus-2026-edital-003-b.js` | Oito bancos específicos adicionais do magistério |
 | `sao-mateus-2026-app.js` | Gerador de simulados, histórico, correção e interface |
 
 Para acrescentar questões específicas, adicione pares `["Termo", "Definição precisa"]` nos arquivos de bancos específicos correspondentes; o gerador produzirá duas modalidades de exercício por par. O cadastro e o nível de escolaridade de cada um dos 38 cargos estão em `saoMateusCargos`, dentro de `sao-mateus-2026-app.js`. Atualizações do edital devem ser revisadas e refletidas no conteúdo.
 
 ## Referência principal
 
-Edital nº 001/2026 de São Mateus do Maranhão, Anexo I (cargos), item 13 (prova objetiva) e Anexo III (conteúdo programático). Recomenda-se acompanhar eventuais retificações do edital publicadas pela organizadora.
+Editais oficiais da CONSULPAM, publicados em 16/11/2026:
+- [Edital 001/2026 (cargos gerais)](https://consulpam.com.br/index.php?acao=ver&id=880&menu=concursos)
+- [Edital 002/2026 (Trânsito e Guarda Municipal)](https://consulpam.com.br/index.php?acao=ver&id=881&menu=concursos)
+- [Edital 003/2026 (Magistério)](https://consulpam.com.br/index.php?acao=ver&id=882&menu=concursos)
+
+Para cada carreira, conferir o Anexo I (cargos e requisitos), o quadro de prova objetiva e o Anexo III (conteúdo programático). Recomenda-se acompanhar eventuais retificações publicadas pela organizadora.
