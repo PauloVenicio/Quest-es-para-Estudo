@@ -11,10 +11,11 @@ O site original e seu ranking continuam no arquivo `index.html`. O novo módulo 
 
 ## O que foi incluído
 
-- Banco de **1.595 questões distintas** após filtragem de duplicidades textuais: 831 gerais e 764 específicas (inclui variações autorais de conceitos).
-- Seleção de **18 cargos** com conteúdos específicos preparados nesta etapa.
+- Banco de **2.395 questões distintas** após filtragem de duplicidades textuais: 831 gerais e 1.564 específicas (inclui variações autorais de conceitos).
+- Seleção dos **38 cargos do edital**, agrupados por nível fundamental (5), médio/técnico (14) e superior (19).
 - **Simulado com 40 questões**, quatro alternativas e limite de três horas.
-- Distribuição: 10 de Língua Portuguesa; 10 de conhecimentos gerais adicionais; 20 de conhecimentos específicos. Para o nível médio/técnico, o bloco geral adicional mistura Informática e Direito, como **arranjo didático**: o edital não detalha a quantidade isolada de cada uma dessas duas disciplinas.
+- Distribuição: 10 de Língua Portuguesa; 10 de conhecimentos gerais complementares; 20 de conhecimentos específicos. No nível fundamental, o bloco complementar tem Matemática e Raciocínio Lógico. No médio/técnico, as 10 questões são divididas didaticamente em 5 de Informática e 5 de Direito. No superior, a divisão didática é 4 de Matemática, 3 de Informática e 3 de Direito. O edital **não fixa a divisão individual** dessas matérias nos blocos complementares de médio/técnico e superior.
+- Nos 14 cargos superiores da área de Saúde listados no edital: 15 questões específicas do cargo e 5 de Legislação SUS (composição didática dentro das 20 específicas).
 - Nota de 0 a 100; critério de aprovação simulada de 50 pontos e ao menos um acerto em cada área.
 - Treino por disciplina, prioridade para questões ainda não vistas, revisão de erros, correção comentada, tema claro/escuro, layout responsivo e impressão do resultado.
 - Histórico local por dispositivo (`localStorage`). Não há sincronização dos resultados deste módulo com o ranking online original.
@@ -23,24 +24,44 @@ O site original e seu ranking continuam no arquivo `index.html`. O novo módulo 
 
 1. Agente Administrativo
 2. Agente de Vigilância Sanitária
-3. AOSD
-4. Auxiliar de Saúde Bucal
-5. Auxiliar de Turma
-6. Eletricista
-7. Fiscal Ambiental
-8. Fiscal de Tributos
-9. Motorista B
-10. Motorista D
-11. Orientador Social
-12. Recepcionista
-13. Secretário de Escola
-14. Técnico de Enfermagem
-15. Técnico em Radiologia
-16. Técnico em Segurança do Trabalho
-17. Técnico de Saúde Bucal
-18. Vigia
+3. AOSD (Auxiliar Operacional de Serviços Diversos)
+4. Assistente Social
+5. Auxiliar de Saúde Bucal
+6. Auditor Fiscal
+7. Auxiliar de Turma
+8. Biólogo
+9. Biomédico
+10. Bioquímico
+11. Contador
+12. Dentista
+13. Eletricista
+14. Enfermeiro
+15. Engenheiro Ambiental
+16. Engenheiro Civil
+17. Engenheiro Elétrico
+18. Farmacêutico
+19. Fiscal Ambiental
+20. Fiscal de Tributos
+21. Fisioterapeuta
+22. Fonoaudiólogo
+23. Médico - Clínico Geral
+24. Motorista B
+25. Motorista D
+26. Nutricionista
+27. Orientador Social
+28. Psicólogo
+29. Radiologista
+30. Recepcionista
+31. Secretário de Escola
+32. Técnico de Enfermagem
+33. Técnico em Radiologia
+34. Técnico em Segurança do Trabalho
+35. Técnico de Saúde Bucal
+36. Terapeuta Ocupacional
+37. Topógrafo
+38. Vigia
 
-**Importante:** os demais cargos previstos no edital ainda não possuem treinamento específico neste módulo. As perguntas são materiais **autorais de treino**, elaborados com referência aos assuntos do Anexo III do edital. Não são reproduções de provas oficiais nem foram revisadas ou endossadas pela Prefeitura ou pela banca. Questões devem ser conferidas contra legislação e bibliografia atualizadas.
+O módulo oferece um banco inicial de questões autorais para **todos os 38 cargos**. A inclusão de um cargo indica que há questões disponíveis para praticar, não que todo o conteúdo extenso do edital esteja esgotado ou revisado por especialistas. As questões de associação de conceitos são exercícios didáticos, não transcrições de provas CONSULPAM.
 
 ## Arquivos
 
@@ -51,9 +72,11 @@ O site original e seu ranking continuam no arquivo `index.html`. O novo módulo 
 | `sao-mateus-2026-banco.js` | Reaproveitamento de bancos de matérias gerais do projeto |
 | `sao-mateus-2026-especificas.js` | Banco conceitual autoral de conhecimentos específicos e SUS |
 | `sao-mateus-2026-complementares.js` | Questões autorais adicionais de Português, Matemática, Informática e Direito |
+| `sao-mateus-2026-superior-saude.js` | Questões autorais específicas de 10 novas áreas profissionais, incluindo Saúde e Serviço Social |
+| `sao-mateus-2026-superior-demais.js` | Questões autorais específicas de outras 10 áreas, incluindo Contabilidade, Engenharias e Topografia |
 | `sao-mateus-2026-app.js` | Gerador de simulados, histórico, correção e interface |
 
-Para acrescentar questões específicas, adicione pares `["Termo", "Definição precisa"]` ao conjunto do cargo em `sao-mateus-2026-especificas.js`; o gerador produzirá duas modalidades de exercício por par. Para incluir cargos adicionais, estenda `saoMateusCargos` no arquivo `sao-mateus-2026-app.js` e adicione o conteúdo específico correspondente.
+Para acrescentar questões específicas, adicione pares `["Termo", "Definição precisa"]` nos arquivos de bancos específicos correspondentes; o gerador produzirá duas modalidades de exercício por par. O cadastro e o nível de escolaridade de cada um dos 38 cargos estão em `saoMateusCargos`, dentro de `sao-mateus-2026-app.js`. Atualizações do edital devem ser revisadas e refletidas no conteúdo.
 
 ## Referência principal
 
