@@ -51,27 +51,54 @@ function normalize(raw,area){
  const question=clearTags(raw.question);
  return {question,options,correct,explanation:clearTags(raw.explanation)||"Resposta correta: "+options[correct]+".",topic:raw.topic||"",area};
 }
+function idOf(q){
+ if(!q._qid)q._qid=canonical(q.question)+"|"+canonical(q.options[q.correct]);
+ return q._qid;
+}
 function unique(items){
  const map=new Map();
- for(const q of items){if(!q)continue;const k=canonical(q.question)+"|"+canonical(q.options[q.correct]);if(!map.has(k))map.set(k,q);}
+ for(const q of items){if(!q)continue;const k=idOf(q);if(!map.has(k))map.set(k,q);}
  return [...map.values()];
 }
+// Bancos incluem problemas resolvíveis, estudos de conceitos e conteúdos anteriores.
 const geral={
- portugues:unique([...saoMateusGeneral.portugues,...saoMateusExpandirGerais("portugues")].map(q=>normalize(q,"Português"))),
- matematica:unique([...saoMateusGeneral.matematica,...saoMateusExpandirGerais("matematica")].map(q=>normalize(q,"Matemática e Raciocínio Lógico"))),
- informatica:unique([...saoMateusGeneral.informatica,...saoMateusExpandirGerais("informatica")].map(q=>normalize(q,"Noções de Informática"))),
- direito:unique([...saoMateusGeneral.direito,...saoMateusExpandirGerais("direito")].map(q=>normalize(q,"Direito Administrativo e Constitucional"))),
+ portugues:unique([...saoMateusGeneral.portugues,...saoMateusExpandirGerais("portugues"),...saoMateusPortuguesNovas(),...saoMateusConceituaisNovas("portugues",saoMateusConceitosGerais.portugues)].map(q=>normalize(q,"Português"))),
+ matematica:unique([...saoMateusGeneral.matematica,...saoMateusExpandirGerais("matematica"),...saoMateusCalculosNovos()].map(q=>normalize(q,"Matemática e Raciocínio Lógico"))),
+ informatica:unique([...saoMateusGeneral.informatica,...saoMateusExpandirGerais("informatica"),...saoMateusConceituaisNovas("informatica",saoMateusConceitosGerais.informatica)].map(q=>normalize(q,"Noções de Informática"))),
+ direito:unique([...saoMateusGeneral.direito,...saoMateusExpandirGerais("direito"),...saoMateusConceituaisNovas("direito",saoMateusConceitosGerais.direito)].map(q=>normalize(q,"Direito Administrativo e Constitucional"))),
  etica:unique(saoMateusGeneral.etica.map(q=>normalize(q,"Ética e Administração"))),
  ambiente:unique(saoMateusGeneral.ambiente.map(q=>normalize(q,"Meio Ambiente")))
 };
 const poolsEspecificas={};
-for(const chave of Object.keys(saoMateusConceitos))poolsEspecificas[chave]=unique(saoMateusExpandirConceitos(chave).map(q=>normalize(q,"Conhecimentos Específicos")));
+for(const chave of Object.keys(saoMateusConceitos)){
+ const itens=saoMateusConceitos[chave];
+ poolsEspecificas[chave]=unique([...saoMateusExpandirConceitos(chave),...saoMateusConceituaisNovas(chave,itens)].map(q=>normalize(q,"Conhecimentos Específicos")));
+}
 const cargoSelect=el("cargo"),subjectSelect=el("disciplina"),countNote=el("availableCount");
 const errorKey="saomateus26_erradas_v1",seenPrefix="saomateus26_vistas_v1_",recordPrefix="saomateus26_record_v1_";
+const globalSeenKey="saomateus26_vistas_globais_v2",recentKey="saomateus26_recentes_v2";
 let mode="simulado",session=null,ticker=null;
 function readArray(key){try{const v=JSON.parse(localStorage.getItem(key)||"[]");return Array.isArray(v)?v:[];}catch{return[];}}
 function storeArray(key,arr){try{localStorage.setItem(key,JSON.stringify(arr));}catch{}}
-function idOf(q){return canonical(q.question)+"|"+canonical(q.options[q.correct]);}
+// IDs curtos e persistentes evitam registros extensos no armazenamento móvel.
+function shortId(q){
+ const src=idOf(q);
+ if(q._shortId)return q._shortId;
+ let hash=2166136261;
+ for(let i=0;i<src.length;i++){hash^=src.charCodeAt(i);hash=Math.imul(hash,16777619);}
+ q._shortId=(hash>>>0).toString(36)+"_"+src.length.toString(36);
+ return q._shortId;
+}
+const globalSeen=new Set(readArray(globalSeenKey)),recentSeen=readArray(recentKey).slice(-600);
+const recentSet=new Set(recentSeen);
+function markPresented(q){
+ const id=shortId(q);
+ globalSeen.add(id);
+ const last=recentSeen.indexOf(id);if(last>=0)recentSeen.splice(last,1);
+ recentSeen.push(id);recentSet.add(id);
+ if(recentSeen.length>600){recentSeen.splice(0,recentSeen.length-600);recentSet.clear();for(const item of recentSeen)recentSet.add(item);}
+ storeArray(globalSeenKey,[...globalSeen]);storeArray(recentKey,recentSeen);
+}
 function selectedCargo(){return saoMateusCargos.find(c=>c.id===cargoSelect.value)||saoMateusCargos[0];}
 function specificFor(c){
  let bank=poolsEspecificas[c.area]||[];
@@ -122,17 +149,38 @@ function updateAvailability(){
  const c=selectedCargo(),pools=availablePools(c),key=subjectSelect.value||"tudo";
  const err=new Set(readArray(errorKey));
  const total=mode==="erros"?pools[key].filter(q=>err.has(idOf(q))).length:pools[key].length;
- countNote.textContent=mode==="simulado"?"40 questões • 2,5 pontos por acerto • até 3 horas":total.toLocaleString("pt-BR")+" questões disponíveis neste filtro";
+ const ineditas=mode==="erros"?0:pools[key].reduce((sum,q)=>sum+(!globalSeen.has(shortId(q))?1:0),0);
+ countNote.textContent=mode==="simulado"?"40 questões • 2,5 pontos por acerto • até 3 horas • sem repetição enquanto houver inéditas":total.toLocaleString("pt-BR")+" questões neste filtro • "+ineditas.toLocaleString("pt-BR")+" ainda não exibidas neste aparelho";
  el("startBtn").disabled=mode==="erros"&&total===0;
  el("startBtn").style.opacity=el("startBtn").disabled?".55":"1";
  try{const r=JSON.parse(localStorage.getItem(recordPrefix+c.id)||"null");el("recordText").textContent=r?"🏅 Seu melhor simulado neste cargo: "+r.best.toFixed(1).replace(".",",")+" pontos.":"Faça seu primeiro simulado neste cargo e acompanhe seu melhor resultado.";}catch{}
 }
 function takeQuestions(pool,n,scope){
- const ordered=shuffle(unique(pool)),seen=new Set(readArray(seenPrefix+scope));
- ordered.sort((a,b)=>Number(seen.has(idOf(a)))-Number(seen.has(idOf(b))));
- const selected=[],topics=new Set();
- for(const q of ordered){const topic=q.topic?canonical(q.topic):idOf(q);if(topics.has(topic))continue;topics.add(topic);selected.push(q);if(selected.length===n)return selected;}
- for(const q of ordered){if(selected.includes(q))continue;selected.push(q);if(selected.length===n)break;}
+ // Primeiro consome todas as perguntas genuinamente inéditas, inclusive entre cargos.
+ const oldScope=new Set(readArray(seenPrefix+scope)),fresh=[],review=[];
+ for(const q of shuffle(unique(pool))){
+  if(globalSeen.has(shortId(q))||oldScope.has(idOf(q)))review.push(q);
+  else fresh.push(q);
+ }
+ // Se o banco acabar, as menos recentes vêm primeiro.
+ const lastIndex=new Map(recentSeen.map((id,i)=>[id,i]));
+ review.sort((a,b)=>(lastIndex.get(shortId(a))??-1)-(lastIndex.get(shortId(b))??-1));
+ const selected=[],selectedIds=new Set(),topics=new Set();
+ const consume=(items)=>{
+  for(const q of items){
+   const topic=q.topic?canonical(q.topic):idOf(q);
+   if(topics.has(topic))continue;
+   selected.push(q);topics.add(topic);selectedIds.add(idOf(q));
+   if(selected.length>=n)return true;
+  }
+  for(const q of items){
+   if(selectedIds.has(idOf(q)))continue;
+   selected.push(q);selectedIds.add(idOf(q));
+   if(selected.length>=n)return true;
+  }
+  return false;
+ };
+ consume(fresh);if(selected.length<n)consume(review);
  return selected;
 }
 function makeExam(c){
@@ -189,6 +237,7 @@ function updateClock(){
 function renderQuestion(){
  if(!session)return;
  const q=session.questions[session.index];const i=session.index,n=session.questions.length;
+ markPresented(q);
  el("questionText").textContent=q.question;el("stepBadge").textContent=(i+1)+" / "+n;
  el("sectionBadge").textContent=q.group==="especificos"?"Conhecimentos específicos":q.area;
  const p=Math.round((i/n)*100);el("progressFill").style.width=p+"%";el("progress").setAttribute("aria-valuenow",String(p));
