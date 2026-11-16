@@ -268,7 +268,7 @@ function init(){
  }
  el("cargoCount").textContent=saoMateusCargos.length;
  const all=unique([...Object.values(geral).flat(),...Object.values(poolsEspecificas).flat()]);
- el("totalCount").textContent=all.length.toLocaleString("pt-BR")+"+";
+ el("totalCount").textContent=all.length.toLocaleString("pt-BR");
  const saved=localStorage.getItem("saomateus26_cargo");
  cargoSelect.value=saved&&saoMateusCargos.some(x=>x.id===saved)?saved:"1";
  cargoSelect.addEventListener("change",()=>{localStorage.setItem("saomateus26_cargo",cargoSelect.value);updateSubjects();});
