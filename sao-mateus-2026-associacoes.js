@@ -19,7 +19,17 @@ function saoMateusConceituaisNovas(chave,itens){
   medico:"Medicina",nutricionista:"Nutrição",psicologo:"Psicologia",radiologista:"Diagnóstico por Imagem",
   terapeuta_ocupacional:"Terapia Ocupacional",auditor_fiscal:"Auditoria Fiscal",contador:"Contabilidade",
   engenheiro_ambiental:"Engenharia Ambiental",engenheiro_civil:"Engenharia Civil",
-  engenheiro_eletrico:"Engenharia Elétrica",topografo:"Topografia"
+  engenheiro_eletrico:"Engenharia Elétrica",topografo:"Topografia",
+  transito:"Agente de Trânsito",guarda_municipal:"Guarda Municipal",
+  didatica:"Didática e Legislação Educacional",pedagogo:"Pedagogia",
+  professor_anos_iniciais:"Docência nos anos iniciais",professor_braille:"Ensino do Braille",
+  professor_aee:"Atendimento Educacional Especializado",professor_arte:"Ensino de Arte",
+  professor_ciencias:"Ensino de Ciências",professor_cultura_digital:"Cultura Digital na Educação",
+  professor_edfisica:"Educação Física Escolar",professor_infantil:"Educação Infantil",
+  professor_geografia:"Ensino de Geografia",professor_historia:"Ensino de História",
+  professor_ingles:"Ensino de Língua Inglesa",professor_portugues:"Ensino de Língua Portuguesa",
+  professor_matematica:"Ensino de Matemática",professor_quilombola:"Educação Escolar Quilombola",
+  professor_ejai:"Educação de Jovens, Adultos e Idosos",professor_libras:"Interpretação de Libras"
  };
  const area=nomes[chave]||chave.replaceAll("_"," ");
  const conceito=i=>itens[(i+total*10)%total];
